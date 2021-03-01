@@ -15,6 +15,9 @@ it is empty *)
     | PLUS
     | MINUS
     | MUL
+    | DIV
+    | LBRAC
+    | RBRAC
     | EOF
     | NEWLINE
 
@@ -33,7 +36,8 @@ left associative and the precedence increase as you go down this list.
 
 
 %left PLUS MINUS  (* + and - are of same precedence *)
-%left MUL         (* higher than + and -            *)
+%left MUL  DIV    (* * and / higher than + and -  but of same precedence *)
+%left LBRAC RBRAC (* ( and ) have highest precedence *)
 
 (* The type that captures position in the input *)
 %pos int
@@ -47,6 +51,8 @@ EXPS    : (* empty *)          ( []                  )
 	| EXP NEWLINE EXPS     ( EXP :: EXPS         )
 
 EXP     : CONST                ( Ast.Const CONST     )
-        | EXP PLUS EXP         ( Ast.plus  EXP1 EXP2 )
-	| EXP MINUS EXP        ( Ast.minus EXP1 EXP2 )
-	| EXP MUL   EXP        ( Ast.mul   EXP1 EXP2 )
+        | EXP PLUS  EXP        ( Ast.plus  EXP1 EXP2 )
+	      | EXP MINUS EXP        ( Ast.minus EXP1 EXP2 )
+	      | EXP MUL   EXP        ( Ast.mul   EXP1 EXP2 )
+        | EXP DIV   EXP        ( Ast.div   EXP1 EXP2 )
+        | LBRAC EXP RBRAC      ( EXP )
