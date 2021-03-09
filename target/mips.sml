@@ -18,7 +18,7 @@ struct
 
 	datatype ('l,'t) inst = (*Load and Store Instructions*)
 							(*load instructions*)
-						|	la   of 't * 'l     (*Load Address*)
+							la   of 't * 'l     (*Load Address*)
 						|	lb   of 't * 'l     (*Load Byte*)
 						|	lbu  of 't * 'l     (*Load Unsigned Byte*)
 						|	ld   of 't * 'l     (*Load Double word*)
