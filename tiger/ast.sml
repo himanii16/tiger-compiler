@@ -15,51 +15,50 @@ struct
 	(*GEQ : >= , LEQ : <= , EQ : = , NEQ : <> , GT : > , LT : <*)
 	datatype binaryOp = Mul | Div | Plus | Minus | GEQ | LEQ | EQ | NEQ | GT | LT | AND | OR
 
-	datatype exp      = nil   (*null*)
+	datatype exp = nil   (*null*)
 
-					 (*string constant (literal)*)
-					 | StrConstant of string
+				(*string constant (literal)*)
+				| StrConstant of string
 
-					 (*integer constant (literal)*)
-					 | IntConst    of int
-					 
-					 (* Variables, field, elements of an array.*)
-					 | Lvalue      of var
+				(*integer constant (literal)*)
+				| IntConst    of int
+				
+				(* Variables, field, elements of an array.*)
+				| Lvalue      of var
 
-					 (*binary operation expressions*)
-					 | BinaryOpExp      of {left: exp, oper: binaryOp, right: exp}
+				(*binary operation expressions*)
+				| BinaryOpExp of {left: exp, oper: binaryOp, right: exp}
 
-					 (*function call expression*)
-					 | FuncCall     of {name: string, arguments: exp list}
+				(*function call expression*)
+				| FuncCall    of {name: string, arguments: exp list}
 
-					 (*array expression : init - initial value*)
-					 | ArrExp      of {name: string, size: exp, init: exp}
+				(*array expression : init - initial value*)
+				| ArrExp      of {name: string, size: exp, init: exp}
 
-					 (*Sequence expression*)
-					 | SeqExp      of exp list
+				(*Sequence expression*)
+				| SeqExp      of exp list
 
-					 (*Record expression*)
-					 | RecordExp   of {name: string, ty: (string*exp) list}
+				(*Record expression*)
+				| RecordExp   of {name: string, ty: (string*exp) list}
 
-					 (* assigning expression*)
-					 | AssignExp   of {variable: string, assignment: exp}
+				(* assigning expression*)
+				| AssignExp   of {variable: string, assignment: exp}
 
-					 (* Conditional expressions*)
-					 | IfExp       of {test: exp, elif: exp, otherwise: exp}
-					 | WhileExp    of {test: exp, body: exp}
-					 | ForExp      of {variable: string, init: exp, final: exp, body: exp}
-					 | BreakExp
-					 | LetExp      of {decl: dec list, body: exp}
+				(* Conditional expressions*)
+				| IfExp       of {test: exp, elif: exp, otherwise: exp}
+				| WhileExp    of {test: exp, body: exp}
+				| ForExp      of {variable: string, init: exp, final: exp, body: exp}
+				| BreakExp
+				| LetExp      of {decl: dec list, body: exp}
 
 		(*declarations*)
-		and dec 	 = TypeDec of typefield list   (*type declaration*)
-					 | FuncDec of funcfield list   (*function declaration*)
-					 | VarDec  of varfield         (*variable declaration*)
+		and dec = TypeDec of typefield list   (*type declaration*)
+				| FuncDec of funcfield list   (*function declaration*)
+				| VarDec  of varfield         (*variable declaration*)
 
-		and typ      = alias  of string                   (*type alias*)
-					 | record of (string * string) list   (*record type*)
-					 | arr    of string                   (*array type*)
-
+		and typ = alias  of string                   (*type alias*)
+				| record of (string * string) list   (*record type*)
+				| arr    of string                   (*array type*)
 
 		and var = SimpleVar of string        (*variable*)
 				| FieldVar  of var * string  (*field varibale*)
@@ -67,19 +66,19 @@ struct
 
 
 	(*classfields - including variable field, type field and function field*)
-	withtype  varfield = { name   : string
-						 , ty     : string option
-						 , init   : exp
-						 }
+	withtype  	varfield = { name  : string
+							, ty    : string option
+							, init  : exp
+							}
 
-		   and typefield = { name  : string
-					       , ty    : typ
-					       }
+			and typefield = { name : string
+							, ty   : typ
+							}
 
-	       and funcfield = { name       : string
-	                   	  , arguments   : typefield list
-	                      , result_type : string option
-	                      , body        : exp
-	                      }
+			and funcfield = { name        : string
+							, arguments   : typefield list
+							, result_type : string option
+							, body        : exp
+							}
 
 end
