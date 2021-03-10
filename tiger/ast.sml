@@ -4,11 +4,11 @@
 3. https://www.cs.cornell.edu/courses/cs312/2008sp/recitations/rec02.html
 *)
 
-structure Tiger = 
+structure Ast = 
 struct
 
 	(*exp ::= expression, decs ::= declarations*)
-	datatype ast = exp | decs
+	datatype program = exp | decs
 
 
 	(*binaryOp datatype defines the valid operators*)
@@ -18,7 +18,7 @@ struct
 	datatype exp = nil   (*null*)
 
 				(*string constant (literal)*)
-				| StrConstant of string
+				| ID of string
 
 				(*integer constant (literal)*)
 				| IntConst    of int
@@ -56,6 +56,8 @@ struct
 				| FuncDec of funcfield list   (*function declaration*)
 				| VarDec  of varfield         (*variable declaration*)
 
+		and decs = Dec of dec list
+
 		and typ = alias  of string                   (*type alias*)
 				| record of (string * string) list   (*record type*)
 				| arr    of string                   (*array type*)
@@ -66,16 +68,16 @@ struct
 
 
 	(*classfields - including variable field, type field and function field*)
-	withtype  	varfield = { name  : string
+		and	varfield = Varf of { name  : string
 							, ty    : string option
 							, init  : exp
 							}
 
-			and typefield = { name : string
+		and typefield = Typef of { name : string
 							, ty   : typ
 							}
 
-			and funcfield = { name        : string
+		and funcfield = Funcf of { name        : string
 							, arguments   : typefield list
 							, result_type : string option
 							, body        : exp
