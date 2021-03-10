@@ -15,32 +15,31 @@ struct
 	(*GEQ : >= , LEQ : <= , EQ : = , NEQ : <> , GT : > , LT : <*)
 	datatype binaryOp = Mul | Div | Plus | Minus | GEQ | LEQ | EQ | NEQ | GT | LT | AND | OR
 
-	datatype var = SimpleVar of string        (*variable*)
-				 | FieldVar  of var * string  (*field varibale*)
-				 | ArrVar    of var * exp     (*array variable*)
-
-		and exp      = nil   (*null*)
+	datatype exp      = nil   (*null*)
 
 					 (*string constant (literal)*)
-					 | strConstant of string
+					 | StrConstant of string
 
 					 (*integer constant (literal)*)
-					 | intConst    of int
+					 | IntConst    of int
 					 
-					 (*array operations*)
-					 | lvalue      of var
+					 (* Variables, field, elements of an array.*)
+					 | Lvalue      of var
 
-					 (*doing binary operation on expressions*)
-					 | OpCall      of {left: exp, oper: binaryOp, right: exp}
+					 (*binary operation expressions*)
+					 | BinaryOpExp      of {left: exp, oper: binaryOp, right: exp}
 
-					 (*function call*)
-					 | FunCall     of {name: string, arguments: exp list}
+					 (*function call expression*)
+					 | FuncCall     of {name: string, arguments: exp list}
 
 					 (*array expression : init - initial value*)
 					 | ArrExp      of {name: string, size: exp, init: exp}
 
-					 (*negative of expression*)
-					 | NegExp      of exp
+					 (*Sequence expression*)
+					 | SeqExp      of exp list
+
+					 (*Record expression*)
+					 | RecordExp   of {name: string, ty: (string*exp) list}
 
 					 (* assigning expression*)
 					 | AssignExp   of {variable: string, assignment: exp}
@@ -60,6 +59,11 @@ struct
 		and typ      = alias  of string                   (*type alias*)
 					 | record of (string * string) list   (*record type*)
 					 | arr    of string                   (*array type*)
+
+
+		and var = SimpleVar of string        (*variable*)
+				| FieldVar  of var * string  (*field varibale*)
+				| ArrVar    of var * exp     (*array variable*)
 
 
 	(*classfields - including variable field, type field and function field*)
