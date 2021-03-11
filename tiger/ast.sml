@@ -8,8 +8,7 @@ structure Ast =
 struct
 
 	(*exp ::= expression, decs ::= declarations*)
-	datatype program = exp | decs
-
+	datatype program = exp | dec
 
 	(*binaryOp datatype defines the valid operators*)
 	(*GEQ : >= , LEQ : <= , EQ : = , NEQ : <> , GT : > , LT : <*)
@@ -18,7 +17,7 @@ struct
 	datatype exp = nil   (*null*)
 
 				(*string constant (literal)*)
-				| ID of string
+				| ID          of string
 
 				(*integer constant (literal)*)
 				| IntConst    of int
@@ -56,8 +55,6 @@ struct
 				| FuncDec of funcfield list   (*function declaration*)
 				| VarDec  of varfield         (*variable declaration*)
 
-		and decs = Dec of dec list
-
 		and typ = alias  of string                   (*type alias*)
 				| record of (string * string) list   (*record type*)
 				| arr    of string                   (*array type*)
@@ -66,21 +63,20 @@ struct
 				| FieldVar  of var * string  (*field varibale*)
 				| ArrVar    of var * exp     (*array variable*)
 
-
-	(*classfields - including variable field, type field and function field*)
-		and	varfield = Varf of { name  : string
-							, ty    : string option
-							, init  : exp
-							}
+		(*classfields - including variable field, type field and function field*)
+		and	varfield = Varf of { name   : string
+								, ty    : string option
+								, init  : exp
+								}
 
 		and typefield = Typef of { name : string
-							, ty   : typ
-							}
+								, ty    : typ
+								}
 
-		and funcfield = Funcf of { name        : string
-							, arguments   : typefield list
-							, result_type : string option
-							, body        : exp
-							}
+		and funcfield = Funcf of { name       : string
+								, arguments   : typefield list
+								, result_type : string option
+								, body        : exp
+								}
 
 end
