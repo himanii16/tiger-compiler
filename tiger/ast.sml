@@ -26,7 +26,7 @@ struct
 				| Lvalue      of var
 
 				(*binary operation expressions*)
-				| BinaryOpExp of {left: exp, oper: binaryOp, right: exp}
+				| BinOpExp of {left: exp, oper: binaryOp, right: exp}
 
 				(*function call expression*)
 				| FuncCall    of {name: string, arguments: exp list}
@@ -38,17 +38,18 @@ struct
 				| SeqExp      of exp list
 
 				(*Record expression*)
-				| RecordExp   of {name: string, ty: (string*exp) list}
+				| RecordExp   of {name: string, field: (string*exp) list}
 
 				(* assigning expression*)
 				| AssignExp   of {variable: string, assignment: exp}
 
 				(* Conditional expressions*)
-				| IfExp       of {test: exp, elif: exp, otherwise: exp}
+				| IfExp       of {test: exp, then: exp, otherwise: exp}
+				| IfThenExp   of {test: exp, then: exp}
 				| WhileExp    of {test: exp, body: exp}
 				| ForExp      of {variable: string, init: exp, final: exp, body: exp}
 				| BreakExp
-				| LetExp      of {decl: dec list, body: exp}
+				| LetExp      of {decl: dec list, body: exp list}
 
 		(*declarations*)
 		and dec = TypeDec of typefield list   (*type declaration*)
