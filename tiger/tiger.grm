@@ -36,7 +36,7 @@
 
 %start PROGRAM
 
-%noshift EOF
+%noshift EOF 
 %nonassoc ASSIGN
 %nonassoc SEMICOLON 
 %nonassoc DO 
@@ -49,6 +49,7 @@
 %nonassoc EQ NEQ LT LEQ GT GEQ
 %left PLUS MINUS
 %left MUL DIV
+%nonassoc ID
 
 %prefer THEN ELSE LPAREN
 
@@ -61,8 +62,8 @@ EXPS :                         ([])
      | EXP SEMICOLON EXPS      (EXP :: EXPS)
 
 EXP : NIL                   (Ast.nil)
-    | ID                    (Ast.ID)
-    | INT                   (Ast.IntConst)
+    | STRING                (Ast.StringConst STRING)
+    | INT                   (Ast.IntConst INT)
     | LVALUE                (LVALUE)
     | RECORD                (RECORD)
     | EXP PLUS EXP          (Ast.BinOpExp ({left = EXP1, oper = Ast.Plus, right = EXP2}))
@@ -82,8 +83,8 @@ EXP : NIL                   (Ast.nil)
     | LPAREN EXP SEMICOLON EXPS RPAREN    (Ast.SeqExp (EXP::EXPS)) 
     | IF EXP THEN EXP ELSE EXP  (Ast.IfExp ({test_cond: EXP1, body_expr: EXP2, otherwise: EXP3}))
     | IF EXP THEN EXP           (Ast.IfThenExp ({test_cond: EXP1, body_expr: EXP2}))
-    | WHILE EXP DO EXP          (Ast.WhileExp ({{test_cond: EXP1, body_expr: EXP2}}))
-    | FOR ID ASSIGN EXP TO EXP DO EXP (Ast.ForExp ({{id_name: ID, first_i: EXP1, final: EXP2, body_expr: EXP3}}))
+    | WHILE EXP DO EXP          (Ast.WhileExp ({test_cond: EXP1, body_expr: EXP2}))
+    | FOR ID ASSIGN EXP TO EXP DO EXP (Ast.ForExp ({id_name: ID, first_i: EXP1, final: EXP2, body_expr: EXP3}))
     | BREAK                      (Ast.BreakExp)
     | LET DECS IN EXPS END       (Ast.LetExp ({decl: DECS, body_expr: EXPS}))
     | LPAREN EXP RPAREN          (EXP)
@@ -103,11 +104,9 @@ LVALUE :                        (Ast.SimpleVar (ID))
        | LVALUE DOT ID          (Ast.FieldVar (LVALUE, ID))
        | ID LBRAC EXP RBRAC     (Ast.ArrVar (ID, EXP))
 
-RECORD : ID NIL                 (Ast.RecordExp ({id_name: ID, field_elem: []}))
-       | ID LBRACE ARGS RBRACE  (Ast.RecordExp ({id_name: ID, field_elem: ARGS}))
+RECORD : ID LBRACE ARGS RBRACE  (Ast.RecordExp ({id_name: ID, field_elem: ARGS}))
 
-ARGS : (*EMPTY*)                (NIL)
-     | STRING EQ EXP            (ID, EXP :: NIL)
+ARGS : ID EQ EXP                (ID, EXP :: NIL)
      | ARGS COMMA ID EQ EXP     (ID, EXP :: ARGS)
 
 TYPEDEC : TYPE ID EQ TY         (Ast.Typef ({id_name: ID, ty: TY}))

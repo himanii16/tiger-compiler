@@ -15,6 +15,7 @@ type lexresult     = (svalue,pos) token
 
 fun eof   ()      = Tokens.EOF (!lineRef,!posRef)
 
+val newlineCount = List.length o List.filter (fn x => x = #"\n") o String.explode
 %%
 
 %header (functor TigerLexFun(structure Tokens : Tiger_TOKENS));
@@ -23,8 +24,12 @@ digit = [0-9]+;
 string = [a-zA-Z.];
 %%
 
-\n               => (updateLine 1; lex ());
+"#".*\n          => ( updateLine 1; lex ());
 {ws}+            => (updatepos (String.size yytext); lex());
+\n({ws}*\n)*  => ( let val old = !lineRef
+                    in updateLine (newlineCount yytext); Tokens.NEWLINE (old, !lineRef)
+                    end
+                );
 {digit}+         => (Tokens.INT (yytext, !lineRef, !posRef));
 
 
