@@ -29,27 +29,27 @@ struct
 				| BinOpExp of {left: exp, oper: binaryOp, right: exp}
 
 				(*function call expression*)
-				| FuncCall    of {name: string, arguments: exp list}
+				| FuncCall    of {id_name: string, fun_args: exp list}
 
 				(*array expression : init - initial value*)
-				| ArrExp      of {name: string, size: exp, init: exp}
+				| ArrExp      of {id_name: string, arr_size: exp, first_i: exp}
 
 				(*Sequence expression*)
 				| SeqExp      of exp list
 
 				(*Record expression*)
-				| RecordExp   of {name: string, field: (string*exp) list}
+				| RecordExp   of {id_name: string, field_elem: (string*exp) list}
 
 				(* assigning expression*)
-				| AssignExp   of {variable: string, assignment: exp}
+				| AssignExp   of {id_name: string, assignment: exp}
 
 				(* Conditional expressions*)
-				| IfExp       of {test: exp, then: exp, otherwise: exp}
-				| IfThenExp   of {test: exp, then: exp}
-				| WhileExp    of {test: exp, body: exp}
-				| ForExp      of {variable: string, init: exp, final: exp, body: exp}
+				| IfExp       of {test_cond: exp, body_expr: exp, otherwise: exp}
+				| IfThenExp   of {test_cond: exp, body_expr: exp}
+				| WhileExp    of {test_cond: exp, body_expr: exp}
+				| ForExp      of {id_name: string, first_i: exp, final: exp, body_expr: exp}
 				| BreakExp
-				| LetExp      of {decl: dec list, body: exp list}
+				| LetExp      of {decl: dec list, body_expr: exp list}
 
 		(*declarations*)
 		and dec = TypeDec of typefield list   (*type declaration*)
@@ -65,19 +65,19 @@ struct
 				| ArrVar    of var * exp     (*array variable*)
 
 		(*classfields - including variable field, type field and function field*)
-		and	varfield = Varf of { name   : string
+		and	varfield = Varf of { id_name   : string
 								, ty    : string option
-								, init  : exp
+								, first_i  : exp
 								}
 
-		and typefield = Typef of { name : string
+		and typefield = Typef of { id_name : string
 								, ty    : typ
 								}
 
-		and funcfield = Funcf of { name       : string
-								, arguments   : typefield list
+		and funcfield = Funcf of { id_name       : string
+								, fun_args   : typefield list
 								, result_type : string option
-								, body        : exp
+								, body_expr        : exp
 								}
 
 end
