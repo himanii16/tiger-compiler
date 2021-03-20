@@ -5,12 +5,13 @@
 %pos int
 %eop EOF  (* end of parsing *)
 %verbose  (* Generates a printed form of the table in expr.grm.desc *)
-
+%pure
+%name Tiger
 
 (* BRAC - [] , BRACE - {} , PAREN - ()*)
 
-%term NIL
-    | ID of string
+%term NIL 
+    | ID of Ast.id
     | INT of int
     | STRING of string
     | MUL | DIV | PLUS | MINUS | GEQ | LEQ | EQ | NEQ | GT | LT | AND | OR
@@ -23,49 +24,55 @@
        | EXPS    of Ast.exp list
        | DEC     of Ast.dec
        | DECS    of Ast.dec list
-       | PROGRAM of Ast.program list 
+       | PROGRAM of Ast.program  
        | PARAM   of Ast.exp list
-       | LVALUE  of Ast.Lvalue 
-       | RECORD  of Ast.RecordExp
-       | ARGS    of STRING*Ast.exp list
-       | TYPEDEC of Ast.TypeDec
-       | FUNCDEC  of Ast.FuncDec
-       | VARDEC  of Ast.VarDec
+       | LVALUE  of Ast.var
+       | RECORD  of Ast.exp
+       | ARGS    of (Ast.id * Ast.exp) list
+       | TYPEDEC of (Ast.id * Ast.typ) list
+       | FUNCDEC  of Ast.funcfield list
+       | VARDEC  of Ast.varfield
        | TY      of Ast.typ
-       | TYFIELD of Ast.typefield
+       | TYFIELD of Ast.tyfield list
 
 %start PROGRAM
 
 %noshift EOF 
+
+%nonassoc ID
+%left LPAREN RPAREN
 %nonassoc ASSIGN
-%nonassoc SEMICOLON 
-%nonassoc DO 
-%right THEN
-%right ELSE
-%nonassoc OF
 %left OR
 %left AND
-%left DOT
 %nonassoc EQ NEQ LT LEQ GT GEQ
 %left PLUS MINUS
 %left MUL DIV
-%nonassoc ID
+%left LBRAC RBRAC LBRACE RBRACE
+%nonassoc SEMICOLON 
+%nonassoc THEN
+%nonassoc ELSE
+%nonassoc DO
+%nonassoc OF
+%nonassoc TYPE
+%nonassoc FUNCTION
 
 %prefer THEN ELSE LPAREN
 
 %%
 (* grammar rules *)
 
-PROGRAM : EXP                 (PROGRAM)
+PROGRAM : EXP                 (Ast.Program EXP)
 
 EXPS :                         ([])
+     | EXP                     ([EXP])
      | EXP SEMICOLON EXPS      (EXP :: EXPS)
 
-EXP : NIL                   (Ast.nil)
+EXP : NIL                   (Ast.Nil)
     | STRING                (Ast.StringConst STRING)
     | INT                   (Ast.IntConst INT)
-    | LVALUE                (LVALUE)
+    | LVALUE                (Ast.Lvalue LVALUE)
     | RECORD                (RECORD)
+    | MINUS EXP             (Ast.NegativeExp EXP)
     | EXP PLUS EXP          (Ast.BinOpExp ({left = EXP1, oper = Ast.Plus, right = EXP2}))
     | EXP MINUS EXP         (Ast.BinOpExp ({left = EXP1, oper = Ast.Minus, right = EXP2}))
     | EXP MUL EXP           (Ast.BinOpExp ({left = EXP1, oper = Ast.Mul, right = EXP2}))
@@ -78,44 +85,48 @@ EXP : NIL                   (Ast.nil)
     | EXP LT EXP            (Ast.BinOpExp ({left = EXP1, oper = Ast.LT, right = EXP2}))
     | EXP AND EXP           (Ast.BinOpExp ({left = EXP1, oper = Ast.AND, right = EXP2}))
     | EXP OR EXP            (Ast.BinOpExp ({left = EXP1, oper = Ast.OR, right = EXP2}))
-    | ID LPAREN PARAM RPAREN   (Ast.FuncCall ({id_name: ID, fun_args: PARAM}))
-    | ID LBRAC EXP RBRAC OF EXP (Ast.ArrExp ({id_name: ID, arr_size: EXP1, first_i: EXP2}))
+    | ID LPAREN PARAM RPAREN   (Ast.FuncCall ({func_id = ID, fun_args = PARAM}))
+    | ID LBRAC EXP RBRAC OF EXP (Ast.ArrExp ({arr_id = ID, arr_size = EXP1, first_i = EXP2}))
     | LPAREN EXP SEMICOLON EXPS RPAREN    (Ast.SeqExp (EXP::EXPS)) 
-    | IF EXP THEN EXP ELSE EXP  (Ast.IfExp ({test_cond: EXP1, body_expr: EXP2, otherwise: EXP3}))
-    | IF EXP THEN EXP           (Ast.IfThenExp ({test_cond: EXP1, body_expr: EXP2}))
-    | WHILE EXP DO EXP          (Ast.WhileExp ({test_cond: EXP1, body_expr: EXP2}))
-    | FOR ID ASSIGN EXP TO EXP DO EXP (Ast.ForExp ({id_name: ID, first_i: EXP1, final: EXP2, body_expr: EXP3}))
+    | IF EXP THEN EXP ELSE EXP  (Ast.IfExp ({if_cond = EXP1, body_if = EXP2, otherwise = EXP3}))
+    | IF EXP THEN EXP           (Ast.IfThenExp ({ifthen_cond = EXP1, body_ifthen = EXP2}))
+    | WHILE EXP DO EXP          (Ast.WhileExp ({test_cond = EXP1, body_while = EXP2}))
+    | FOR ID ASSIGN EXP TO EXP DO EXP (Ast.ForExp ({for_id = ID, first_e = EXP1, final_e = EXP2, body_for = EXP3}))
     | BREAK                      (Ast.BreakExp)
-    | LET DECS IN EXPS END       (Ast.LetExp ({decl: DECS, body_expr: EXPS}))
+    | LVALUE ASSIGN EXP         (Ast.AssignExp ({assign_var = LVALUE, assignment = EXP}))
+    | LET DECS IN EXPS END       (Ast.LetExp ({decl = DECS, body_expr = EXPS}))
     | LPAREN EXP RPAREN          (EXP)
 
 
 PARAM : EXP                   ([EXP])
     | EXP COMMA PARAM       (EXP :: PARAM)
 
-DEC : TYPEDEC               (TYPEDEC)
-    | FUNCDEC               (FUNCDEC) 
-    | VARDEC                (VARDEC)
+DEC : TYPEDEC               (Ast.TypeDec TYPEDEC)
+    | FUNCDEC               (Ast.FuncDec FUNCDEC) 
+    | VARDEC                (Ast.VarDec VARDEC)
 
 DECS :                      ([])
     | DEC DECS              (DEC :: DECS)
 
-LVALUE :                        (Ast.SimpleVar (ID))
+LVALUE : ID                       (Ast.SimpleVar (ID))
        | LVALUE DOT ID          (Ast.FieldVar (LVALUE, ID))
        | ID LBRAC EXP RBRAC     (Ast.ArrVar (ID, EXP))
 
-RECORD : ID LBRACE ARGS RBRACE  (Ast.RecordExp ({id_name: ID, field_elem: ARGS}))
+RECORD : ID LBRACE ARGS RBRACE  (Ast.RecordExp ({record_id = ID, field_elem = ARGS}))
 
-ARGS : ID EQ EXP                (ID, EXP :: NIL)
-     | ARGS COMMA ID EQ EXP     (ID, EXP :: ARGS)
+ARGS : ID EQ EXP                ((ID, EXP) :: [])
+     | ARGS COMMA ID EQ EXP     ((ID, EXP) :: ARGS)
 
-TYPEDEC : TYPE ID EQ TY         (Ast.Typef ({id_name: ID, ty: TY}))
+TYPEDEC : TYPE ID EQ TY         ([(ID,TY)])
+        | TYPE ID EQ TY TYPEDEC    ((ID,TY)::TYPEDEC)
 
-FUNCDEC : FUNCTION ID LPAREN TYFIELD RPAREN EQ EXP (Ast.Funcf ({id_name: ID, fun_args: TYFIELD, result_type: NONE, body_expr: EXP}))
-        | FUNCTION ID LPAREN TYFIELD RPAREN COLON ID EQ EXP (Ast.Funcf ({id_name: ID1, fun_args: TYFIELD, result_type: SOME ID2, body_expr: EXP}))
+FUNCDEC : FUNCTION ID LPAREN TYFIELD RPAREN EQ EXP ([Ast.Funcf ({funcf_id = ID, fun_args = TYFIELD, result_type = NONE, funcf_body = EXP})])
+        | FUNCTION ID LPAREN TYFIELD RPAREN EQ EXP FUNCDEC (Ast.Funcf ({funcf_id = ID, fun_args = TYFIELD, result_type = NONE, funcf_body = EXP}) :: FUNCDEC)
+        | FUNCTION ID LPAREN TYFIELD RPAREN COLON ID EQ EXP ([Ast.Funcf ({funcf_id = ID1, fun_args = TYFIELD, result_type = SOME(ID2), funcf_body = EXP})])
+        | FUNCTION ID LPAREN TYFIELD RPAREN COLON ID EQ EXP FUNCDEC (Ast.Funcf ({funcf_id = ID1, fun_args = TYFIELD, result_type = SOME(ID2), funcf_body = EXP}) :: FUNCDEC)
 
-VARDEC : VAR ID ASSIGN EXP              (Ast.Varf ({id_name: ID, ty: NONE, first_i: EXP}))
-       | VAR ID COLON ID ASSIGN EXP     (Ast.Varf ({id_name: ID1, ty: SOME ID2, first_i: EXP}))
+VARDEC : VAR ID ASSIGN EXP              (Ast.Varf ({varf_id = ID, varf_ty = NONE, varf_first = EXP}))
+       | VAR ID COLON ID ASSIGN EXP     (Ast.Varf ({varf_id = ID1, varf_ty = SOME(ID2), varf_first = EXP}))
 
 TY : ID                         (Ast.alias (ID))
    | LBRACE TYFIELD RBRACE      (Ast.record (TYFIELD))

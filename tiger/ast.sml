@@ -8,7 +8,6 @@ structure Ast =
 struct
 
 	(*exp ::= expression, decs ::= declarations*)
-	datatype program = exp | dec
 	type id = string
 	type type_id = id
 	type tyfield = id * type_id
@@ -17,7 +16,8 @@ struct
 	(*GEQ : >= , LEQ : <= , EQ : = , NEQ : <> , GT : > , LT : <*)
 	datatype binaryOp = Mul | Div | Plus | Minus | GEQ | LEQ | EQ | NEQ | GT | LT | AND | OR
 
-	datatype exp = nil   (*null*)
+	datatype program = Program of exp 
+	and		 exp = Nil 		 (*null*)
 
 				(*string constant (literal)*)
 				| StringConst of string
@@ -32,55 +32,53 @@ struct
 				| BinOpExp    of {left: exp, oper: binaryOp, right: exp}
 
 				(*function call expression*)
-				| FuncCall    of {id_name: id, fun_args: exp list}
+				| FuncCall    of {func_id: id, fun_args: exp list}
 
 				(*array expression : init - initial value*)
-				| ArrExp      of {id_name: id, arr_size: exp, first_i: exp}
+				| ArrExp      of {arr_id: id, arr_size: exp, first_i: exp}
 
 				(*Sequence expression*)
 				| SeqExp      of exp list
 
 				(*Record expression*)
-				| RecordExp   of {id_name: id, field_elem: (id*exp) list}
+				| RecordExp   of {record_id: id, field_elem: (id*exp) list}
 
 				(* assigning expression*)
-				| AssignExp   of {id_name: id, assignment: exp}
+				| AssignExp   of {assign_var: var, assignment: exp}
+
+				| NegativeExp of exp	
 
 				(* Conditional expressions*)
-				| IfExp       of {test_cond: exp, body_expr: exp, otherwise: exp}
-				| IfThenExp   of {test_cond: exp, body_expr: exp}
-				| WhileExp    of {test_cond: exp, body_expr: exp}
-				| ForExp      of {id_name: id, first_i: exp, final: exp, body_expr: exp}
+				| IfExp       of {if_cond: exp, body_if: exp, otherwise: exp}
+				| IfThenExp   of {ifthen_cond: exp, body_ifthen: exp}
+				| WhileExp    of {test_cond: exp, body_while: exp}
+				| ForExp      of {for_id: id, first_e: exp, final_e: exp, body_for: exp}
 				| BreakExp
 				| LetExp      of {decl: dec list, body_expr: exp list}
 
 		(*declarations*)
-		and dec = TypeDec of typefield list   (*type declaration*)
+		and dec = TypeDec of (type_id*typ) list   (*type declaration*)
 				| FuncDec of funcfield list   (*function declaration*)
 				| VarDec  of varfield         (*variable declaration*)
 
 		and typ = alias  of type_id                   (*type alias*)
-				| record of typefield list   (*record type*)
+				| record of tyfield list   (*record type*)
 				| arr    of type_id                   (*array type*)
 
 		and var = SimpleVar of id        (*variable*)
 				| FieldVar  of var * id  (*field varibale*)
-				| ArrVar    of var * exp     (*array variable*)
+				| ArrVar    of id * exp     (*array variable*)
 
 		(*classfields - including variable field, type field and function field*)
-		and	varfield = Varf of { id_name   : id
-								, ty    : type_id option
-								, first_i  : exp
+		and	varfield = Varf of { varf_id   : id
+								, varf_ty    : type_id option
+								, varf_first  : exp
 								}
 
-		and typefield = Typef of { id_name : id
-								, ty    : typ
-								}
-
-		and funcfield = Funcf of { id_name       : id
-								, fun_args   : typefield list
+		and funcfield = Funcf of { funcf_id      : id
+								, fun_args   : tyfield list
 								, result_type : type_id option
-								, body_expr        : exp
+								, funcf_body       : exp
 								}
 
 end
