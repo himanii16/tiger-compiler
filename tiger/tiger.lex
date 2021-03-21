@@ -35,7 +35,6 @@ ws    = [\ \t\b\r]+;
 digit = [0-9]+;
 string = [a-zA-Z][a-zA-Z0-9]*;
 comment=\/\*.*\*\/;
-
 %%
 
 \n               => ( updateLine 1;resetpos(); lex ());
@@ -86,4 +85,7 @@ comment=\/\*.*\*\/;
 {digit}+         => (Tokens.INT (toInt yytext, !lineRef, !posRef));
 {comment}        => (lex());
 {string}         => (updatepos (String.size yytext); Tokens.ID (yytext, !lineRef, !posRef));
+
+
+
 

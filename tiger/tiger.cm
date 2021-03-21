@@ -1,0 +1,13 @@
+Library
+structure TC
+is
+"ast.sml"
+"tiger.lex.sml"
+"tiger.grm.sml"
+"tiger.grm.sig"
+"glue.sml"
+"tc.sml"
+$/basis.cm
+$/ml-yacc-lib.cm
+$smlnj/compiler/compiler.cm
+
