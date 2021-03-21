@@ -34,11 +34,12 @@ val newlineCount = List.length o List.filter (fn x => x = #"\n") o String.explod
 ws    = [\ \t\b\r]+;
 digit = [0-9]+;
 string = [a-zA-Z][a-zA-Z0-9]*;
-comment=\/\*.*\*\/;
+comment = \/\*.*\*\/;
+char = {string}|{ws}|\n;
+quote = \";
 %%
 
-\n               => ( updateLine 1;resetpos(); lex ());
-
+\n               => (updateLine 1;resetpos(); lex ()); 
 "*"              => (updatepos (String.size yytext); Tokens.MUL         (!lineRef, !posRef));
 "/"              => (updatepos (String.size yytext); Tokens.DIV         (!lineRef, !posRef));
 "+"              => (updatepos (String.size yytext); Tokens.PLUS        (!lineRef, !posRef));
@@ -81,10 +82,11 @@ comment=\/\*.*\*\/;
 "of"             => (updatepos (String.size yytext); Tokens.OF          (!lineRef, !posRef));
 
 
+{quote}{char}*{quote}     => (updatepos (String.size yytext); Tokens.STRING      (yytext, !lineRef, !posRef));
 {ws}+            => (updatepos (String.size yytext); lex());
 {digit}+         => (Tokens.INT (toInt yytext, !lineRef, !posRef));
 {comment}        => (lex());
-{string}         => (updatepos (String.size yytext); Tokens.ID (yytext, !lineRef, !posRef));
+{string}         => (updatepos (String.size yytext); Tokens.ID          (yytext, !lineRef, !posRef));
 
 
 

@@ -17,10 +17,11 @@ let
        (
            for i := 0 to N-1
 	            do (
-                    2+3            
+                    print("afs dljla 
+                    "); break           
                     )
         ) 
     )
 
- in 5; count
+ in (5;6)
 end
