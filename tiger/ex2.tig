@@ -1,0 +1,13 @@
+/* Example tiger file */
+let
+    var count := 0
+
+ in 
+    (-(2+3);
+    "soms string";
+    break;
+    3;
+    5 | 2;
+    3 & 1;
+    )
+end 

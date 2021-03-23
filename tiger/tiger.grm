@@ -61,7 +61,7 @@
 %%
 (* grammar rules *)
 
-PROGRAM : EXP                 (Ast.Program EXP)
+PROGRAM : EXP                 (Ast.Expression EXP)
 
 EXPS :                         ([])
      | EXP                     ([EXP])
@@ -88,13 +88,13 @@ EXP : NIL                   (Ast.Nil)
     | ID LPAREN PARAM RPAREN   (Ast.FuncCall ({func_id = ID, fun_args = PARAM}))
     | ID LBRAC EXP RBRAC OF EXP (Ast.ArrExp ({arr_id = ID, arr_size = EXP1, first_i = EXP2}))
     | LPAREN EXP SEMICOLON EXPS RPAREN    (Ast.SeqExp (EXP::EXPS)) 
-    | IF EXP THEN EXP ELSE EXP  (Ast.IfExp ({if_cond = EXP1, body_if = EXP2, otherwise = EXP3}))
+    | IF EXP THEN EXP ELSE EXP  (Ast.IfExp ({if_cond = EXP1, body_if = EXP2, otherwise = EXP3})) 
     | IF EXP THEN EXP           (Ast.IfThenExp ({ifthen_cond = EXP1, body_ifthen = EXP2}))
     | WHILE EXP DO EXP          (Ast.WhileExp ({test_cond = EXP1, body_while = EXP2}))
     | FOR ID ASSIGN EXP TO EXP DO EXP (Ast.ForExp ({for_id = ID, first_e = EXP1, final_e = EXP2, body_for = EXP3}))
     | BREAK                      (Ast.BreakExp)
     | LVALUE ASSIGN EXP         (Ast.AssignExp ({assign_var = LVALUE, assignment = EXP}))
-    | LET DECS IN EXPS END       (Ast.LetExp ({decl = DECS, body_expr = EXPS}))
+    | LET DECS IN EXP END       (Ast.LetExp ({decl = DECS, body_expr = EXP}))
     | LPAREN EXP RPAREN          (EXP)
 
 

@@ -21,7 +21,12 @@ let
                     "); break           
                     )
         ) 
-    )
+    )  
 
- in (5;6)
+    var count := 0
+
+ in 
+    while (count<6) do 
+        count := count + 1
+
 end

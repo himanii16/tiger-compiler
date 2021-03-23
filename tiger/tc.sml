@@ -9,12 +9,6 @@ structure TigerParser = Join( structure ParserData = TigerLrVals.ParserData
                             structure LrParser   = LrParser
                         )
 
-(* 
-
-At this point every thing regarding lexing and parsing is contained in
-the TigerParser structure. Let us create a lexer using this.
-
-*)
 (* Build Lexers *)
 fun makeTigerLexer strm = TigerParser.makeLexer (fn n => TextIO.inputN(strm,n))
 val makeFileLexer      = makeTigerLexer o TextIO.openIn
@@ -33,4 +27,7 @@ fun print_error (s,i:int,_) = TextIO.output(TextIO.stdErr, "Error, line " ^ (Int
 
 val (program,_) = TigerParser.parse (0,thisLexer,print_error,()) (* parsing *)
 
+val _ = PrintAst.print(TextIO.stdOut, program) 
+
 end
+

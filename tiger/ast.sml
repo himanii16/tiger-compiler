@@ -16,7 +16,7 @@ struct
 	(*GEQ : >= , LEQ : <= , EQ : = , NEQ : <> , GT : > , LT : <*)
 	datatype binaryOp = Mul | Div | Plus | Minus | GEQ | LEQ | EQ | NEQ | GT | LT | AND | OR
 
-	datatype program = Program of exp 
+	datatype program = Expression of exp 
 	and		 exp = Nil 		 (*null*)
 
 				(*string constant (literal)*)
@@ -54,7 +54,7 @@ struct
 				| WhileExp    of {test_cond: exp, body_while: exp}
 				| ForExp      of {for_id: id, first_e: exp, final_e: exp, body_for: exp}
 				| BreakExp
-				| LetExp      of {decl: dec list, body_expr: exp list}
+				| LetExp      of {decl: dec list, body_expr: exp}
 
 		(*declarations*)
 		and dec = TypeDec of (type_id*typ) list   (*type declaration*)

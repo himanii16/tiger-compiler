@@ -15,6 +15,6 @@ clean:
 	rm -f *.lex.sml
 	rm -f *.grm.sml *.grm.desc *grm.sig tiger
 
-tiger: ec.sml tiger.mlb tiger.grm.sml tiger.lex.sml
+tiger: PrintAst.sml tc.sml tiger.mlb tiger.grm.sml tiger.lex.sml
 	mlton tiger.mlb
 	

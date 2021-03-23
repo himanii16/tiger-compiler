@@ -38,7 +38,7 @@ comment = \/\*.*\*\/;
 char = {string}|{ws}|\n;
 quote = \";
 %%
-
+    
 \n               => (updateLine 1;resetpos(); lex ()); 
 "*"              => (updatepos (String.size yytext); Tokens.MUL         (!lineRef, !posRef));
 "/"              => (updatepos (String.size yytext); Tokens.DIV         (!lineRef, !posRef));
