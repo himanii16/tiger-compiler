@@ -11,3 +11,11 @@ Updated reverse polish compiler to support brackets and division
 ## 2021-03-03
 
 Captured ASTs of tiger and mips language. 
+
+## 2021-03-10
+
+Made lex file and grm file for the tiger language.
+
+## 2021-03-17
+
+Added file to print AST structure of the language.
