@@ -1,0 +1,12 @@
+let
+	type r = {i : int, s: string, secS: string, next: r}
+	var rec := r {i = 88, s = "this is a str", secS = "second string\t\078\079\n\\\"...", next = nil}
+    var x := 5
+	var y := 6
+	var z := 7
+in 
+	(rec.s;
+	if x=5 & y=6 & z=7
+	then (print("it's in then!\n"); print("This works...\n"))
+	else (print("it's in else"); print("This doesn't works... :(\n"));) 
+end

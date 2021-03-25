@@ -35,8 +35,8 @@ ws    = [\ \t\b\r]+;
 digit = [0-9]+;
 string = [a-zA-Z][a-zA-Z0-9]*;
 comment = \/\*.*\*\/;
-char = {string}|{ws}|\\n|\.;
 quote = \";
+char = {string}|{ws}|\\n|\.|\\|{quote}|{digit}|\'| \! | \: | \( | \) | \[ | \] |\{ |\} ;
 %%
     
 \n               => (updateLine 1;resetpos(); lex ()); 
