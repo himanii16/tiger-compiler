@@ -98,7 +98,8 @@ EXP : NIL                   (Ast.Nil)
     | LPAREN EXP RPAREN          (EXP)
 
 
-PARAM : EXP                   ([EXP])
+PARAM : (*empty *)          ([]) 
+    | EXP                   ([EXP])
     | EXP COMMA PARAM       (EXP :: PARAM)
 
 DEC : TYPEDEC               (Ast.TypeDec TYPEDEC)

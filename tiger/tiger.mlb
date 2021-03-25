@@ -5,5 +5,5 @@ ast.sml
 tiger.grm.sig
 tiger.grm.sml
 tiger.lex.sml
-PrintAst.sml
-tc.sml
+PrintAst.sml 
+tc.sml 
