@@ -18,4 +18,8 @@ Made lex file and grm file for the tiger language.
 
 ## 2021-03-17
 
-Added file to print AST structure of the language.
+Added file to print AST structure of the tiger language.
+
+## 2021-03-24
+
+Built a pretty printer for tiger language. 

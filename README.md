@@ -4,8 +4,8 @@ Name - Himani Jain
 
 Roll No. - 111801016
 
-## To run tiger parser
+## Tiger Compiler
 
-1. make command (runs makefile)
-2. executable tiger will be generated
-3. ./tiger ex1.tig ex2.tig to run the sample test cases
+All the code for the tiger compiler has been shifted to the folder tiger-compiler.
+
+The submissions for lab assignments can be found there. The commands details to be followed to run the compiler is included in the README file of the directory tiger-compiler. 
