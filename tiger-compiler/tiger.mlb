@@ -1,0 +1,11 @@
+$(SML_LIB)/basis/basis.mlb
+$(SML_LIB)/mlyacc-lib/mlyacc-lib.mlb
+
+Tiger/ast.sml
+Tiger/tiger.grm.sig
+Tiger/tiger.grm.sml
+Tiger/tiger.lex.sml
+Tiger/printast.sml 
+Target/mips.sml
+Target/pp.sml 
+Tiger/tc.sml 
