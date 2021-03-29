@@ -28,15 +28,23 @@ val (program,_) = TigerParser.parse (0,thisLexer,print_error,()) (* parsing *)
 
 val s = CommandLine.arguments() 
 
-fun customized_printing() = let fun PP ()  = TextIO.output(TextIO.stdOut,pp.compile(program)) 
-                                fun Ast () = PrintAst.print(TextIO.stdOut, program)
+fun customized_printing() = let fun PP () = let val _ = print "\nPretty Printing\n\n" 
+                                            in 
+                                                TextIO.output(TextIO.stdOut,pp.compile(program)) 
+                                            end
+
+                                fun Ast () = let val _ = print "\nPrinting AST\n\n" 
+                                             in
+                                                 PrintAst.print(TextIO.stdOut, program)
+                                             end
+
                                 fun head (xs) = case xs of []  => "empty"
                                                 | (x1::[])     => "none"
                                                 | (x1::x2::_)  => x2
                             in 
                                 if head(s) = "ast" then Ast()
-                                else if head(s) = "pp" then PP()
-                                else let val _ = print "printing both" in Ast(); PP() end
+                                else if head(s) = "pp" then  PP()
+                                else let val _ = print "printing both\n" in Ast(); PP() end
                             end 
 
 val _ = customized_printing() 
