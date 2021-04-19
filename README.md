@@ -12,6 +12,8 @@ The folder Target contains the target files - mips.sml and pp.sml.
 
 The folder test contains some test files of the tiger language. There are 4 such example files. 
 
+The ir part is incomplete since the deadline is not yet over and we can submit it by next week. Kindly don't consider it as per now. 
+
 ### COMPILING
 
 To generate the tiger executable, run one of the following command 
