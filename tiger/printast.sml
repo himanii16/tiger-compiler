@@ -20,7 +20,7 @@ structure A = Ast
             | opname A.LT = "LT"
             | opname A.LEQ = "LEQ"
             | opname A.GEQ = "GEQ"
-            | opname A.GT = "GT"
+            | opname A.GT = "GT" 
             | opname A.AND = "AND"
             | opname A.OR = "OR"
 

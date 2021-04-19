@@ -23,3 +23,15 @@ Added file to print AST structure of the tiger language.
 ## 2021-03-24
 
 Built a pretty printer for tiger language. 
+
+## 2021-03-31
+
+Did no work since no assignment was given
+
+## 2021-04-07
+
+Made Ast for intermediate trees
+
+## 2021-04-14
+
+Started reading canonisation and added signature of canonisation

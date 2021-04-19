@@ -1,7 +1,0 @@
-tiger/*.lex.sml
-tiger/*.grm.sml 
-tiger/*.grm.desc 
-tiger/*grm.sig 
-tiger/tiger 
-target/mips
-target/pp
