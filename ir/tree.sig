@@ -1,5 +1,5 @@
-structure TREE :> TREE =
-struct
+signature TREE =
+sig
 
     datatype binop = PLUS | MINUS | MUL | DIV | AND | OR | LSHIFT | RSHIFT | ARSHIFT | XOR
     datatype relop = EQ | NEQ | GT | LT | GEQ | LEQ | UGT | ULT | UGEQ | ULEQ
@@ -20,3 +20,4 @@ struct
                   | LABEL of Temp.label
 
 end
+
