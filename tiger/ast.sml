@@ -38,7 +38,7 @@ struct
 				| ArrExp      of {arr_id: id, arr_size: exp, first_i: exp}
 
 				(*Sequence expression*)
-				| SeqExp      of exp list
+				| SeqExp      of exp list 
 
 				(*Record expression*)
 				| RecordExp   of {record_id: id, field_elem: (id*exp) list}
@@ -66,7 +66,7 @@ struct
 				| arr    of id                   (*array type*)
 
 		and var = SimpleVar of id        (*variable*)
-				| FieldVar  of var * id  (*field varibale*)
+				| FieldVar  of var * var  (*field varibale*)
 				| ArrVar    of id * exp     (*array variable*)
 
 		(*classfields - including variable field, type field and function field*)

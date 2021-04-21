@@ -30,7 +30,7 @@ structure A = Ast
 
 
         fun   var(A.SimpleVar(s),d)  = (space d; say "SimpleVar("; say(s); say ")")
-            | var(A.FieldVar(v,s),d) = (space d; sayln "FieldVar("; var(v,d+1); sayln ","; space(d+1); say(s); say ")")
+            | var(A.FieldVar(v,v1),d) = (space d; sayln "FieldVar("; var(v,d+1); sayln ","; space(d+1); var(v1,d+1); say ")")
             | var(A.ArrVar(i,e),d) = (space d; sayln "ArrVar("; say(i); sayln ","; exp(e,d+1); say ")")
 
         and   exp(A.Lvalue v, d) = (space d; sayln "Lvalue("; var(v,d+1); say ")")

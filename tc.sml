@@ -42,7 +42,7 @@ fun customized_printing() = let fun PP () = let val _ = print "\nPretty Printing
                                                 | (x1::[])     => "none"
                                                 | (x1::x2::_)  => x2
                             in 
-                                if head(s) = "ast" then Ast()
+                                if head(s) = "--ast" then Ast()
                                 else PP()
                             end 
 

@@ -65,7 +65,7 @@ let fun space  0 = ""
       | operator Ast.OR    = "|"
 
     and var (Ast.SimpleVar (i:Ast.id)) = i 
-      | var (Ast.FieldVar (v,i:Ast.id))  = (var (v)) ^ "." ^ i
+      | var (Ast.FieldVar (v,v1))  = (var (v)) ^ "." ^ (var(v1))
       | var (Ast.ArrVar (i:Ast.id, e)) = i ^ "[" ^ (exp (e)) ^ "]" 
 
     and args []  = "" 

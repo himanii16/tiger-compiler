@@ -48,7 +48,7 @@
 %left PLUS MINUS
 %left MUL DIV
 %left LBRAC RBRAC LBRACE RBRACE
-%nonassoc SEMICOLON 
+%nonassoc SEMICOLON DOT
 %nonassoc THEN
 %nonassoc ELSE
 %nonassoc DO
@@ -87,15 +87,14 @@ EXP : NIL                   (Ast.Nil)
     | EXP OR EXP            (Ast.BinOpExp ({left = EXP1, oper = Ast.OR, right = EXP2}))
     | ID LPAREN PARAM RPAREN   (Ast.FuncCall ({func_id = ID, fun_args = PARAM}))
     | ID LBRAC EXP RBRAC OF EXP (Ast.ArrExp ({arr_id = ID, arr_size = EXP1, first_i = EXP2}))
-    | LPAREN EXP SEMICOLON EXPS RPAREN    (Ast.SeqExp (EXP::EXPS)) 
+    | LPAREN EXPS RPAREN    (Ast.SeqExp (EXPS)) 
     | IF EXP THEN EXP ELSE EXP  (Ast.IfExp ({if_cond = EXP1, body_if = EXP2, otherwise = EXP3})) 
     | IF EXP THEN EXP           (Ast.IfThenExp ({ifthen_cond = EXP1, body_ifthen = EXP2}))
     | WHILE EXP DO EXP          (Ast.WhileExp ({test_cond = EXP1, body_while = EXP2}))
     | FOR ID ASSIGN EXP TO EXP DO EXP (Ast.ForExp ({for_id = ID, first_e = EXP1, final_e = EXP2, body_for = EXP3}))
     | BREAK                      (Ast.BreakExp)
     | LVALUE ASSIGN EXP         (Ast.AssignExp ({assign_var = LVALUE, assignment = EXP}))
-    | LET DECS IN EXP END       (Ast.LetExp ({decl = DECS, body_expr = EXP}))
-    | LPAREN EXP RPAREN          (EXP)
+    | LET DECS IN EXPS END       (Ast.LetExp ({decl = DECS, body_expr = Ast.SeqExp (EXPS)}))
 
 PARAM : (*empty *)          ([]) 
     | EXP                   ([EXP])
@@ -109,7 +108,7 @@ DECS :  (*empty*)                    ([])
     | DEC DECS              (DEC :: DECS)
 
 LVALUE : ID                       (Ast.SimpleVar (ID))
-       | LVALUE DOT ID          (Ast.FieldVar (LVALUE, ID))
+       | LVALUE DOT LVALUE          (Ast.FieldVar (LVALUE1, LVALUE2))
        | ID LBRAC EXP RBRAC     (Ast.ArrVar (ID, EXP))
 
 RECORD : ID LBRACE ARGS RBRACE  (Ast.RecordExp ({record_id = ID, field_elem = ARGS}))
@@ -137,7 +136,4 @@ TYFIELD : (*EMPTY*)                 ([])
         | ID COMMA TYFIELD          ((ID,NONE)::TYFIELD)
         | ID COLON ID               ([(ID1,SOME(ID2))])
         | ID COLON ID COMMA TYFIELD ((ID1,SOME(ID2)) :: TYFIELD)
-
-
-
 
