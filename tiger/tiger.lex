@@ -35,6 +35,7 @@ ws    = [\ \t\b\r]+;
 digit = [0-9]+;
 string = [a-zA-Z_][a-zA-Z0-9_]*; 
 comment = \/\*.*\*\/;
+comment2 = \/\*\n*\*\/;
 quote = \";
 symbols = \+ | \- | \/ | \* | \= | \> | \< | \& | \: | \( | \) | \[ | \] |\{ | \} ;
 char = {string}|{ws}|\\n|\.|\\|{digit}|\'| \! |\n | {symbols} ;

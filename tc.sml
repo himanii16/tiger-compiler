@@ -18,8 +18,13 @@ val makeFileLexer      = makeTigerLexer o TextIO.openIn
 
 val thisLexer = case CommandLine.arguments() of
 		    []  => makeTigerLexer TextIO.stdIn
-		 |  [x] => makeFileLexer x
-         |  [x1,x2] => makeFileLexer x1
+		 (* |  [x] => makeFileLexer x *)
+         |  [x1,x2] => let fun lexer (x) = makeFileLexer (x)
+                        in 
+                        if (x1="--ast") then  lexer (x2)
+                        else if (x1="--pp") then lexer(x2)
+                        else lexer(x1) 
+                        end 
 		 |  _   => (TextIO.output(TextIO.stdErr, "usage: tc file"); OS.Process.exit OS.Process.failure)
 
 fun print_error (s,i:int,_) = TextIO.output(TextIO.stdErr, "Error, line " ^ (Int.toString i) ^ ", " ^ s ^ "\n")
@@ -39,10 +44,13 @@ fun customized_printing() = let fun PP () = let val _ = print "\nPretty Printing
                                              end
 
                                 fun head (xs) = case xs of []  => "empty"
-                                                | (x1::[])     => "none"
-                                                | (x1::x2::_)  => x2
+                                                | ["--ast",_]     => "ast"
+                                                | ["--pp",_]  => "pp"
+                                                | [_,"--ast"]  => "ast"
+                                                | [_,"--pp"]   => "pp" 
+                                                | _             => "none"
                             in 
-                                if head(s) = "--ast" then Ast()
+                                if head(s) = "ast" then Ast()
                                 else PP()
                             end 
 
