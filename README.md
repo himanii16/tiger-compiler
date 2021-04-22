@@ -6,11 +6,11 @@ Roll No. - 111801016
 
 ## TIGER COMPILER
 
-The folder Tiger contains the tiger files - tiger.lex, tiger.grm, tc.sml, printast.sml and ast.sml. 
+The folder tiger contains the tiger files - tiger.lex, tiger.grm, tc.sml, printast.sml and ast.sml. 
 
-The folder Target contains the target files - mips.sml and pp.sml.
+The folder target contains the target files - mips.sml and pp.sml.
 
-The folder test contains some test files of the tiger language. There are 4 such example files. 
+The folder test contains some test files of the tiger language. There are 4 such example files. It should be noted that to run the test file, command line argument must have 2 commands which should be like the ones shown below in printing section. 
 
 The ir part is incomplete since the deadline is not yet over and we can submit it by next week. Kindly don't consider it as per now. 
 
@@ -24,22 +24,18 @@ make all
 
 ### GENERATING AST 
 
-To print ast after compiling of ex1.tig from the test folder(similar can be done for other .tig files), run the following command(giving argument ast)
+To print ast after compiling of ex1.tig from the test folder(similar can be done for other .tig files), run one of the following command(giving argument ast)
 ```bash
-./tc test/ex1.tig ast
+./tc test/test1.tig --ast
+./tc --ast test/test1.tig 
 ```
 
 ### PRETTY PRINTING
 
-To pretty print the program after compiling of ex1.tig from the test folder(similar can be done for other .tig files), run the following command(giving argument pp)
+To pretty print the program after compiling of ex1.tig from the test folder(similar can be done for other .tig files), run one of the following command(giving argument pp)
 ```bash
-./tc test/ex1.tig pp
-```
-### NO ARGUMENTS
-
-If no arguments will be given, it will do the pretty printing. Refer following command(giving no argument)
-```bash
-./tc test/ex1.tig
+./tc test/test1.tig --pp
+./tc --pp test/test1.tig
 ```
 
 ### TEST CASES
