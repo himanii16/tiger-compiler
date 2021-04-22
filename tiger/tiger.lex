@@ -93,5 +93,4 @@ char = {string}|{ws}|\\n|\.|\\|{digit}|\'| \! |\n | {symbols} ;
 
 <INITIAL>\"               =>  (YYBEGIN STRING; updatepos (String.size yytext); str := ""; lex());
 <STRING>{char}+              => (updatepos (String.size yytext); str := !str ^ yytext; lex()); 
-<STRING>{char}+              => (updatepos (String.size yytext); Tokens.STRING      (yytext, !lineRef, !posRef); lex());
 <STRING>\"                => (YYBEGIN INITIAL;updatepos (String.size yytext); Tokens.STRING      (!str, !lineRef, !posRef));
