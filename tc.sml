@@ -18,7 +18,7 @@ val makeFileLexer      = makeTigerLexer o TextIO.openIn
 
 val thisLexer = case CommandLine.arguments() of
 		    []  => makeTigerLexer TextIO.stdIn
-		 (* |  [x] => makeFileLexer x *)
+		 |  [x] => makeFileLexer x
          |  [x1,x2] => let fun lexer (x) = makeFileLexer (x)
                         in 
                         if (x1="--ast") then  lexer (x2)

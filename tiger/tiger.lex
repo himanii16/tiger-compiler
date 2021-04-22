@@ -2,6 +2,7 @@ type lineNo            = int
 type pos               = lineNo  (* The type of Should match with expr.yacc *)
 val  lineRef           = ref 0   (* reference variable to keep track of position.*)
 val  posRef            = ref 0
+val str = ref ""
 
 
 fun updateLine n      = lineRef := !(lineRef) + n
@@ -31,65 +32,66 @@ val newlineCount = List.length o List.filter (fn x => x = #"\n") o String.explod
 %%
 
 %header (functor TigerLexFun(structure Tokens : Tiger_TOKENS));
+%s STRING COMMENT;
 ws    = [\ \t\b\r]+;
 digit = [0-9]+;
 string = [a-zA-Z_][a-zA-Z0-9_]*; 
-comment = \/\*.*\*\/;
-comment2 = \/\*\n*\*\/;
 quote = \";
 symbols = \+ | \- | \/ | \* | \= | \> | \< | \& | \: | \( | \) | \[ | \] |\{ | \} ;
 char = {string}|{ws}|\\n|\.|\\|{digit}|\'| \! |\n | {symbols} ;
 %%
     
-\n               => (updateLine 1;resetpos(); lex ()); 
-"*"              => (updatepos (String.size yytext); Tokens.MUL         (!lineRef, !posRef));
-"/"              => (updatepos (String.size yytext); Tokens.DIV         (!lineRef, !posRef));
-"+"              => (updatepos (String.size yytext); Tokens.PLUS        (!lineRef, !posRef));
-"-"              => (updatepos (String.size yytext); Tokens.MINUS       (!lineRef, !posRef));
-">="             => (updatepos (String.size yytext); Tokens.GEQ         (!lineRef, !posRef));
-"<="             => (updatepos (String.size yytext); Tokens.LEQ         (!lineRef, !posRef));
-"="              => (updatepos (String.size yytext); Tokens.EQ          (!lineRef, !posRef));
-"<>"             => (updatepos (String.size yytext); Tokens.NEQ         (!lineRef, !posRef));
-">"              => (updatepos (String.size yytext); Tokens.GT          (!lineRef, !posRef));
-"<"              => (updatepos (String.size yytext); Tokens.LT          (!lineRef, !posRef));
-"&"              => (updatepos (String.size yytext); Tokens.AND         (!lineRef, !posRef));
-"|"              => (updatepos (String.size yytext); Tokens.OR          (!lineRef, !posRef));
-":="             => (updatepos (String.size yytext); Tokens.ASSIGN      (!lineRef, !posRef));
-"["              => (updatepos (String.size yytext); Tokens.LBRAC       (!lineRef, !posRef));
-"]"              => (updatepos (String.size yytext); Tokens.RBRAC       (!lineRef, !posRef));
-"{"              => (updatepos (String.size yytext); Tokens.LBRACE      (!lineRef, !posRef));
-"}"              => (updatepos (String.size yytext); Tokens.RBRACE      (!lineRef, !posRef));
-"("              => (updatepos (String.size yytext); Tokens.LPAREN      (!lineRef, !posRef));
-")"              => (updatepos (String.size yytext); Tokens.RPAREN      (!lineRef, !posRef));
-","              => (updatepos (String.size yytext); Tokens.COMMA       (!lineRef, !posRef));
-";"              => (updatepos (String.size yytext); Tokens.SEMICOLON   (!lineRef, !posRef));
-":"              => (updatepos (String.size yytext); Tokens.COLON       (!lineRef, !posRef));
-"."              => (updatepos (String.size yytext); Tokens.DOT         (!lineRef, !posRef));
-"array"          => (updatepos (String.size yytext); Tokens.ARRAY       (!lineRef, !posRef));
-"if"             => (updatepos (String.size yytext); Tokens.IF          (!lineRef, !posRef));
-"then"           => (updatepos (String.size yytext); Tokens.THEN        (!lineRef, !posRef));
-"else"           => (updatepos (String.size yytext); Tokens.ELSE        (!lineRef, !posRef));
-"nil"            => (updatepos (String.size yytext); Tokens.NIL         (!lineRef, !posRef));
-"type"           => (updatepos (String.size yytext); Tokens.TYPE        (!lineRef, !posRef));
-"var"            => (updatepos (String.size yytext); Tokens.VAR         (!lineRef, !posRef));
-"let"            => (updatepos (String.size yytext); Tokens.LET         (!lineRef, !posRef));
-"in"             => (updatepos (String.size yytext); Tokens.IN          (!lineRef, !posRef));
-"end"            => (updatepos (String.size yytext); Tokens.END         (!lineRef, !posRef));
-"function"       => (updatepos (String.size yytext); Tokens.FUNCTION    (!lineRef, !posRef));
-"break"          => (updatepos (String.size yytext); Tokens.BREAK       (!lineRef, !posRef));
-"while"          => (updatepos (String.size yytext); Tokens.WHILE       (!lineRef, !posRef));
-"for"            => (updatepos (String.size yytext); Tokens.FOR         (!lineRef, !posRef));
-"to"             => (updatepos (String.size yytext); Tokens.TO          (!lineRef, !posRef));
-"do"             => (updatepos (String.size yytext); Tokens.DO          (!lineRef, !posRef));
-"of"             => (updatepos (String.size yytext); Tokens.OF          (!lineRef, !posRef));
+<INITIAL>\n               => (updateLine 1;resetpos(); lex ()); 
+<INITIAL>"*"              => (updatepos (String.size yytext); Tokens.MUL         (!lineRef, !posRef));
+<INITIAL>"/"              => (updatepos (String.size yytext); Tokens.DIV         (!lineRef, !posRef));
+<INITIAL>"+"              => (updatepos (String.size yytext); Tokens.PLUS        (!lineRef, !posRef));
+<INITIAL>"-"              => (updatepos (String.size yytext); Tokens.MINUS       (!lineRef, !posRef));
+<INITIAL>">="             => (updatepos (String.size yytext); Tokens.GEQ         (!lineRef, !posRef));
+<INITIAL>"<="             => (updatepos (String.size yytext); Tokens.LEQ         (!lineRef, !posRef));
+<INITIAL>"="              => (updatepos (String.size yytext); Tokens.EQ          (!lineRef, !posRef));
+<INITIAL>"<>"             => (updatepos (String.size yytext); Tokens.NEQ         (!lineRef, !posRef));
+<INITIAL>">"              => (updatepos (String.size yytext); Tokens.GT          (!lineRef, !posRef));
+<INITIAL>"<"              => (updatepos (String.size yytext); Tokens.LT          (!lineRef, !posRef));
+<INITIAL>"&"              => (updatepos (String.size yytext); Tokens.AND         (!lineRef, !posRef));
+<INITIAL>"|"              => (updatepos (String.size yytext); Tokens.OR          (!lineRef, !posRef));
+<INITIAL>":="             => (updatepos (String.size yytext); Tokens.ASSIGN      (!lineRef, !posRef));
+<INITIAL>"["              => (updatepos (String.size yytext); Tokens.LBRAC       (!lineRef, !posRef));
+<INITIAL>"]"              => (updatepos (String.size yytext); Tokens.RBRAC       (!lineRef, !posRef));
+<INITIAL>"{"              => (updatepos (String.size yytext); Tokens.LBRACE      (!lineRef, !posRef));
+<INITIAL>"}"              => (updatepos (String.size yytext); Tokens.RBRACE      (!lineRef, !posRef));
+<INITIAL>"("              => (updatepos (String.size yytext); Tokens.LPAREN      (!lineRef, !posRef));
+<INITIAL>")"              => (updatepos (String.size yytext); Tokens.RPAREN      (!lineRef, !posRef));
+<INITIAL>","              => (updatepos (String.size yytext); Tokens.COMMA       (!lineRef, !posRef));
+<INITIAL>";"              => (updatepos (String.size yytext); Tokens.SEMICOLON   (!lineRef, !posRef));
+<INITIAL>":"              => (updatepos (String.size yytext); Tokens.COLON       (!lineRef, !posRef));
+<INITIAL>"."              => (updatepos (String.size yytext); Tokens.DOT         (!lineRef, !posRef));
+<INITIAL>"array"          => (updatepos (String.size yytext); Tokens.ARRAY       (!lineRef, !posRef));
+<INITIAL>"if"             => (updatepos (String.size yytext); Tokens.IF          (!lineRef, !posRef));
+<INITIAL>"then"           => (updatepos (String.size yytext); Tokens.THEN        (!lineRef, !posRef));
+<INITIAL>"else"           => (updatepos (String.size yytext); Tokens.ELSE        (!lineRef, !posRef));
+<INITIAL>"nil"            => (updatepos (String.size yytext); Tokens.NIL         (!lineRef, !posRef));
+<INITIAL>"type"           => (updatepos (String.size yytext); Tokens.TYPE        (!lineRef, !posRef));
+<INITIAL>"var"            => (updatepos (String.size yytext); Tokens.VAR         (!lineRef, !posRef));
+<INITIAL>"let"            => (updatepos (String.size yytext); Tokens.LET         (!lineRef, !posRef));
+<INITIAL>"in"             => (updatepos (String.size yytext); Tokens.IN          (!lineRef, !posRef));
+<INITIAL>"end"            => (updatepos (String.size yytext); Tokens.END         (!lineRef, !posRef));
+<INITIAL>"function"       => (updatepos (String.size yytext); Tokens.FUNCTION    (!lineRef, !posRef));
+<INITIAL>"break"          => (updatepos (String.size yytext); Tokens.BREAK       (!lineRef, !posRef));
+<INITIAL>"while"          => (updatepos (String.size yytext); Tokens.WHILE       (!lineRef, !posRef));
+<INITIAL>"for"            => (updatepos (String.size yytext); Tokens.FOR         (!lineRef, !posRef));
+<INITIAL>"to"             => (updatepos (String.size yytext); Tokens.TO          (!lineRef, !posRef));
+<INITIAL>"do"             => (updatepos (String.size yytext); Tokens.DO          (!lineRef, !posRef));
+<INITIAL>"of"             => (updatepos (String.size yytext); Tokens.OF          (!lineRef, !posRef));
+<INITIAL>{string}         => (updatepos (String.size yytext); Tokens.ID          (yytext, !lineRef, !posRef));
+<INITIAL>{ws}+                     => (updatepos (String.size yytext); lex());
+<INITIAL>{digit}+                  => (Tokens.INT (toInt yytext, !lineRef, !posRef));
 
+<INITIAL>"/*"             =>  (YYBEGIN COMMENT; lex());
+<COMMENT>.                =>  (lex());
+<COMMENT>\n               =>  (lex());
+<COMMENT>"*/"             =>  (YYBEGIN INITIAL; lex());
 
-{quote}{char}*{quote}     => (updatepos (String.size yytext); Tokens.STRING      (yytext, !lineRef, !posRef));
-{ws}+                     => (updatepos (String.size yytext); lex());
-{digit}+                  => (Tokens.INT (toInt yytext, !lineRef, !posRef));
-{comment}                 => (lex());
-{string}                  => (updatepos (String.size yytext); Tokens.ID          (yytext, !lineRef, !posRef));
-
-
-
-
+<INITIAL>\"               =>  (YYBEGIN STRING; updatepos (String.size yytext); str := ""; lex());
+<STRING>{char}+              => (updatepos (String.size yytext); str := !str ^ yytext; lex()); 
+<STRING>{char}+              => (updatepos (String.size yytext); Tokens.STRING      (yytext, !lineRef, !posRef); lex());
+<STRING>\"                => (YYBEGIN INITIAL;updatepos (String.size yytext); Tokens.STRING      (!str, !lineRef, !posRef));

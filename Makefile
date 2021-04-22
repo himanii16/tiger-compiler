@@ -7,28 +7,28 @@
 all: tc 
 	
 test: all 
-	  ./tc test/ex1.tig 
-	  ./tc test/ex2.tig 
-	  ./tc test/ex3.tig 
-	  ./tc test/ex4.tig 
-	  ./tc test/queens.tig 
-	  ./tc test/merge.tig
-	  ./tc test/test1.tig
-	  ./tc test/test2.tig
-	  ./tc test/test3.tig
-	  ./tc test/test4.tig
-	  ./tc test/test5.tig
-	  ./tc test/test6.tig
-	  ./tc test/test7.tig
-	  ./tc test/test8.tig
-	  ./tc test/test11.tig
-	  ./tc test/test12.tig
-	  ./tc test/test14.tig
-	  ./tc test/test15.tig
-	  ./tc test/test42.tig
-	  ./tc test/test46.tig
-	  ./tc test/test47.tig
-	  ./tc test/test48.tig
+	  ./tc test/ex1.tig --pp
+	  ./tc test/ex2.tig --pp 
+	  ./tc test/ex3.tig --pp 
+	  ./tc test/ex4.tig --pp 
+	  ./tc test/queens.tig --pp 
+	  ./tc test/merge.tig --pp
+	  ./tc test/test1.tig --pp
+	  ./tc test/test2.tig --pp
+	  ./tc test/test3.tig --pp
+	  ./tc test/test4.tig --pp
+	  ./tc test/test5.tig --pp
+	  ./tc test/test6.tig --pp
+	  ./tc test/test7.tig --pp
+	  ./tc test/test8.tig --pp
+	  ./tc test/test11.tig --pp
+	  ./tc test/test12.tig --pp
+	  ./tc test/test14.tig --pp
+	  ./tc test/test15.tig --pp
+	  ./tc test/test42.tig --pp
+	  ./tc test/test46.tig --pp
+	  ./tc test/test47.tig --pp
+	  ./tc test/test48.tig --pp
 
 .PHONY: all clean test
 
