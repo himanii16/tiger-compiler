@@ -1,8 +1,8 @@
 signature CANON = 
 sig 
     val linearize : Tree.stmt -> Tree.stmt list 
-    (* val basicBlocks : Tree.stmt list -> (Tree.stmt list list * Temp.label)
-    val traceSchedule : Tree.stmt list list * Temp.label -> Tree.stmt list  *)
+    val basicBlocks : Tree.stmt list -> (Tree.stmt list list * Temp.label)
+    (* val traceSchedule : Tree.stmt list list * Temp.label -> Tree.stmt list  *)
 end 
 
 structure Canon : CANON = 
@@ -61,6 +61,29 @@ struct
 
         in 
             linear (if_stm stm, nil)
+        end
+
+    fun basicBlocks (stms) = 
+        let 
+            val finish = Temp.newlabel ()
+
+            fun rev_list []         = []
+              | rev_list (x::xs)    = (rev_list xs) @ [x] 
+
+            fun one_b ((top as T.LABEL _) :: bottom, list_blocks)   = new_b (bottom,[top],list_blocks)
+              | one_b (nil, list_blocks)                            = (rev_list list_blocks)
+              | one_b (stms, list_blocks)                           = one_b (T.LABEL(Temp.newlabel())::stms, list_blocks) 
+
+            and new_b ((s as (T.JUMP _))::rem, current_b,lb)        = end_b(rem,s::current_b,lb)
+              | new_b ((s as (T.CJUMP _)):: rem, current_b,lb)      = end_b (rem, s::current_b,lb)
+              | new_b (s as (T.LABEL l::_), current_b,lb)           = new_b(T.JUMP(T.NAME l,[l])::s, current_b,lb)
+              | new_b (s::rem, current_b,lb)                        = new_b (rem, s::current_b,lb)
+              | new_b (nil, current_b,lb)                           = new_b([T.JUMP(T.NAME finish, [finish])], current_b,lb)
+            
+            and end_b (s, current_b, list_blocks)                   = one_b (s, rev_list current_b :: list_blocks)
+
+        in 
+            (one_b (stms, nil), finish)
         end
 
 end
