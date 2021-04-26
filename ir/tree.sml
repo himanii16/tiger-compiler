@@ -1,4 +1,4 @@
-structure TREE :> TREE =
+structure Tree :> TREE =
 struct
 
     datatype binop = PLUS | MINUS | MUL | DIV | AND | OR | LSHIFT | RSHIFT | ARSHIFT | XOR
