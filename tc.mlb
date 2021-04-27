@@ -7,5 +7,10 @@ tiger/tiger.grm.sml
 tiger/tiger.lex.sml
 tiger/printast.sml 
 target/mips.sml
-target/pp.sml 
+target/pp.sml
+ir/temp.sml
+ir/tree.sig 
+ir/tree.sml  
+ir/translate.sml
+ir/printtree.sml
 tc.sml 

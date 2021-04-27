@@ -23,6 +23,7 @@ val thisLexer = case CommandLine.arguments() of
                         in 
                         if (x1="--ast") then  lexer (x2)
                         else if (x1="--pp") then lexer(x2)
+                        else if (x1="--ir") then lexer(x2)
                         else lexer(x1) 
                         end 
 		 |  _   => (TextIO.output(TextIO.stdErr, "usage: tc file"); OS.Process.exit OS.Process.failure)
@@ -31,26 +32,25 @@ fun print_error (s,i:int,_) = TextIO.output(TextIO.stdErr, "Error, line " ^ (Int
 
 val (program,_) = TigerParser.parse (0,thisLexer,print_error,()) (* parsing *)
 
+val (ir_representation) = Translate.translate (program)
+
 val s = CommandLine.arguments() 
 
-fun customized_printing() = let fun PP () = let val _ = print "\nPretty Printing\n\n" 
-                                            in 
-                                                TextIO.output(TextIO.stdOut,pp.compile(program)) 
-                                            end
-
-                                fun Ast () = let val _ = print "\nPrinting AST\n\n" 
-                                             in
-                                                 PrintAst.print(TextIO.stdOut, program)
-                                             end
-
+fun customized_printing() = let fun PP () = TextIO.output(TextIO.stdOut,pp.compile(program)) 
+                                fun Ast () = PrintAst.print(TextIO.stdOut, program)
+                                fun IR  () = Printtree.printtree(TextIO.stdOut, ir_representation)
+                                
                                 fun head (xs) = case xs of []  => "empty"
-                                                | ["--ast",_]     => "ast"
-                                                | ["--pp",_]  => "pp"
+                                                | ["--ast",_]  => "ast"
+                                                | ["--pp",_]   => "pp"
                                                 | [_,"--ast"]  => "ast"
                                                 | [_,"--pp"]   => "pp" 
-                                                | _             => "none"
+                                                | [_,"--ir"]   => "ir"
+                                                | ["--ir",_]   => "ir"
+                                                | _            => "none"
                             in 
                                 if head(s) = "ast" then Ast()
+                                else if head(s) = "ir" then IR()
                                 else PP()
                             end 
 
