@@ -35,3 +35,11 @@ Made Ast for intermediate trees.
 ## 2021-04-14
 
 Started reading canonisation and added signature of canonisation.
+
+## 2021-04-21
+
+Did canonisation part. In that linearize and basic blocks, trace Schedule is yet to be added.
+
+## 2021-04-27 
+
+Added skeleton structure for intermediate tree representation \[Incomplete\] and the printtree structure added. 
