@@ -6,7 +6,7 @@ sig
     val  newtemp  : unit -> temp
 end
 
-structure Temp :> TEMP = struct
+structure Temp : TEMP = struct
 
     type label = int (* 2⁶⁴ = ∞ many variables *)
     type temp  = int
