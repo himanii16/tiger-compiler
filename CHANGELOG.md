@@ -1,5 +1,9 @@
 ## To add changes made in project each week
 
+## Latest Change 
+
+The code is priting ir for only Binary operations as per now. More things are yet to be added. 
+
 ## 2021-02-17
 
 Made a simple compiler which prints hello world. 
