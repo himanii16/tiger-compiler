@@ -63,13 +63,30 @@ struct
         | t_exp (Ast.StringConst s) env                             = raise Error
         | t_exp (Ast.IntConst i) env                                = Ex (T.CONST i)
         | t_exp (Ast.Lvalue v) env                                  = raise Error
-        | t_exp (Ast.BinOpExp{left,oper,right}) env                 = raise Error
+        | t_exp (Ast.BinOpExp{left,oper,right}) env                 = let val l       = unEx (t_exp left env)
+                                                                          val r       = unEx (t_exp right env) 
+                                                                          val exp_op  = case oper of 
+                                                                            Ast.Plus  => Ex (T.BINOP (T.PLUS, l, r))
+                                                                          | Ast.Minus => Ex (T.BINOP (T.MINUS, l, r))
+                                                                          | Ast.Mul   => Ex (T.BINOP (T.MUL, l, r))
+                                                                          | Ast.Div   => Ex (T.BINOP (T.DIV, l, r))
+                                                                          | Ast.AND   => Ex (T.BINOP (T.AND, l, r))
+                                                                          | Ast.OR    => Ex (T.BINOP (T.OR, l, r))
+                                                                          | Ast.EQ    => Cx (fn (t,f) => T.CJUMP (T.EQ, l, r, t,f))
+                                                                          | Ast.NEQ   => Cx (fn (t,f) => T.CJUMP (T.NEQ, l, r, t,f))
+                                                                          | Ast.GT    => Cx (fn (t,f) => T.CJUMP (T.GT, l, r, t,f)) 
+                                                                          | Ast.LT    => Cx (fn (t,f) => T.CJUMP (T.LT, l, r, t,f)) 
+                                                                          | Ast.GEQ   => Cx (fn (t,f) => T.CJUMP (T.GEQ, l, r, t,f)) 
+                                                                          | Ast.LEQ   => Cx (fn (t,f) => T.CJUMP (T.LEQ, l, r, t,f)) 
+                                                                      in 
+                                                                          exp_op
+                                                                      end 
         | t_exp (Ast.FuncCall{func_id,fun_args}) env                = raise Error
         | t_exp (Ast.ArrExp{arr_id,arr_size,first_i}) env           = raise Error
         | t_exp (Ast.SeqExp el) env                                 = raise Error
         | t_exp (Ast.RecordExp{record_id,field_elem}) env           = raise Error
         | t_exp (Ast.AssignExp {assign_var,assignment}) env         = raise Error
-        | t_exp (Ast.NegativeExp e) env                             = raise Error
+        | t_exp (Ast.NegativeExp e) env                             = Ex (T.BINOP (T.MINUS, T.CONST 0, unEx (t_exp e env))) 
         | t_exp (Ast.IfExp{if_cond,body_if,otherwise}) env          = raise Error
         | t_exp (Ast.IfThenExp{ifthen_cond,body_ifthen}) env        = raise Error
         | t_exp (Ast.WhileExp{test_cond,body_while}) env            = raise Error
