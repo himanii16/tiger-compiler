@@ -59,29 +59,29 @@ struct
     
     fun translate (prog) = 
     let 
-      fun t_exp (Ast.Nil)                                       = raise Error
-        | t_exp (Ast.StringConst s)                             = raise Error
-        | t_exp (Ast.IntConst i)                                = raise Error
-        | t_exp (Ast.Lvalue v)                                  = raise Error
-        | t_exp (Ast.BinOpExp{left,oper,right})                 = raise Error
-        | t_exp (Ast.FuncCall{func_id,fun_args})                = raise Error
-        | t_exp (Ast.ArrExp{arr_id,arr_size,first_i})           = raise Error
-        | t_exp (Ast.SeqExp el)                                 = raise Error
-        | t_exp (Ast.RecordExp{record_id,field_elem})           = raise Error
-        | t_exp (Ast.AssignExp {assign_var,assignment})         = raise Error
-        | t_exp (Ast.NegativeExp e)                             = raise Error
-        | t_exp (Ast.IfExp{if_cond,body_if,otherwise})          = raise Error
-        | t_exp (Ast.IfThenExp{ifthen_cond,body_ifthen})        = raise Error
-        | t_exp (Ast.WhileExp{test_cond,body_while})            = raise Error
-        | t_exp (Ast.ForExp{for_id,first_e,final_e,body_for})   = raise Error
-        | t_exp (Ast.BreakExp)                                  = raise Error
-        | t_exp (Ast.LetExp{decl,body_expr})                    = raise Error
+      fun t_exp (Ast.Nil) env                                       = Ex (T.CONST 0)
+        | t_exp (Ast.StringConst s) env                             = raise Error
+        | t_exp (Ast.IntConst i) env                                = Ex (T.CONST i)
+        | t_exp (Ast.Lvalue v) env                                  = raise Error
+        | t_exp (Ast.BinOpExp{left,oper,right}) env                 = raise Error
+        | t_exp (Ast.FuncCall{func_id,fun_args}) env                = raise Error
+        | t_exp (Ast.ArrExp{arr_id,arr_size,first_i}) env           = raise Error
+        | t_exp (Ast.SeqExp el) env                                 = raise Error
+        | t_exp (Ast.RecordExp{record_id,field_elem}) env           = raise Error
+        | t_exp (Ast.AssignExp {assign_var,assignment}) env         = raise Error
+        | t_exp (Ast.NegativeExp e) env                             = raise Error
+        | t_exp (Ast.IfExp{if_cond,body_if,otherwise}) env          = raise Error
+        | t_exp (Ast.IfThenExp{ifthen_cond,body_ifthen}) env        = raise Error
+        | t_exp (Ast.WhileExp{test_cond,body_while}) env            = raise Error
+        | t_exp (Ast.ForExp{for_id,first_e,final_e,body_for}) env   = raise Error
+        | t_exp (Ast.BreakExp) env                                  = raise Error
+        | t_exp (Ast.LetExp{decl,body_expr}) env                    = raise Error
 
-      and t_dec (Ast.TypeDec tl) = raise Error
-        | t_dec (Ast.FuncDec fl) = raise Error
-        | t_dec (Ast.VarDec vl)  = raise Error
+      and t_dec (Ast.TypeDec tl) env = raise Error
+        | t_dec (Ast.FuncDec fl) env = raise Error
+        | t_dec (Ast.VarDec vl) env  = raise Error
 
-      and t_expr (Ast.Expression E) = t_exp (E)
+      and t_expr (Ast.Expression E) = unNx (t_exp E Env.Envt)
 
     in 
       t_expr (prog)

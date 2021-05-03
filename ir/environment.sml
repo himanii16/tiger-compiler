@@ -1,6 +1,7 @@
 (* Finite map from strings to 'a *)
 signature ENVIRONMENT = sig 
     type env
+    val Envt : env
     val lookupVar  : string -> env -> Temp.temp option
     val update : string -> Temp.temp -> env -> env 
     (* val lookupFunc : *)
@@ -16,8 +17,6 @@ end
 structure Env : ENVIRONMENT =
 struct
 
-(* Took reference from the atom structure made in last sem *)
-
     exception Error
 
 	structure EnvMap = RedBlackMapFn (struct type ord_key = string 
@@ -28,7 +27,7 @@ struct
 
 	fun lookupVar str currentEnv = EnvMap.find (currentEnv, str) 
 
-    fun update str temp_ currentEnv = EnvMap.insert (currentEnv, str,temp_)
+    fun update str temp_ currentEnv = EnvMap.insert (currentEnv, str,temp_) 
 
 end
 
