@@ -10,7 +10,7 @@ The folder tiger contains the tiger files - tiger.lex, tiger.grm, tc.sml, printa
 
 The folder target contains the target files - mips.sml and pp.sml.
 
-The folder test contains some test files of the tiger language. There are 4 such example files. It should be noted that to run the test file, command line argument must have 2 commands which should be like the ones shown below in printing section. 
+The folder ir contains the intermediate representation files including - canon.sml, environment.sml, printtree.sml,temp.sml, tree.sml, tree.sig.
 
 The ir part is doesn't yet support all the cases. 
 
