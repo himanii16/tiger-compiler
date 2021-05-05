@@ -12,7 +12,7 @@ The folder target contains the target files - mips.sml and pp.sml.
 
 The folder ir contains the intermediate representation files including - canon.sml, environment.sml, printtree.sml,temp.sml, tree.sml, tree.sig.
 
-The ir part is doesn't yet support all the cases. 
+The ir part doesn't yet support all the cases. 
 
 ### COMPILING
 

@@ -88,8 +88,30 @@ struct
         | t_exp (Ast.RecordExp{record_id,field_elem}) env           = raise Unsupported "Not yet supported"
         | t_exp (Ast.AssignExp {assign_var,assignment}) env         = raise Unsupported "Not yet supported"
         | t_exp (Ast.NegativeExp e) env                             = Ex (T.BINOP (T.MINUS, T.CONST 0, unEx (t_exp e env))) 
-        | t_exp (Ast.IfExp{if_cond,body_if,otherwise}) env          = raise Unsupported "Not yet supported"
-        | t_exp (Ast.IfThenExp{ifthen_cond,body_ifthen}) env        = raise Unsupported "Not yet supported"
+        | t_exp (Ast.IfExp{if_cond,body_if,otherwise}) env          = let val r = Temp.newtemp()
+                                                                          val t = Temp.newlabel()
+                                                                          val f = Temp.newlabel()
+                                                                          val res = Temp.newlabel()
+                                                                      in 
+                                                                          Ex (T.ESEQ(seqstmt[
+                                                                            unCx (t_exp if_cond env) (t,f),
+                                                                            T.LABEL t,
+                                                                            T.MOVE (T.TEMP r, unEx (t_exp body_if env)),
+                                                                            T.LABEL f, 
+                                                                            T.MOVE (T.TEMP r, unEx (t_exp otherwise env)),
+                                                                            T.LABEL res
+                                                                          ], T.TEMP r))
+                                                                      end 
+        | t_exp (Ast.IfThenExp{ifthen_cond,body_ifthen}) env        = let val t = Temp.newlabel()
+                                                                          val f = Temp.newlabel()
+                                                                      in 
+                                                                          Nx (seqstmt [
+                                                                            unCx (t_exp ifthen_cond env) (t,f),
+                                                                            T.LABEL t, 
+                                                                            unNx (t_exp body_ifthen env),
+                                                                            T.LABEL f
+                                                                          ])
+                                                                      end 
         | t_exp (Ast.WhileExp{test_cond,body_while}) env            = raise Unsupported "Not yet supported"
         | t_exp (Ast.ForExp{for_id,first_e,final_e,body_for}) env   = raise Unsupported "Not yet supported"
         | t_exp (Ast.BreakExp) env                                  = raise Unsupported "Not yet supported"

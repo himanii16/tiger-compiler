@@ -2,7 +2,7 @@
 
 ## Latest Change 
 
-The code is priting ir for only Binary operations as per now. More things are yet to be added. 
+The code is priting ir for only Binary operations, If conditions as per now. More things are yet to be added. 
 
 ## 2021-02-17
 

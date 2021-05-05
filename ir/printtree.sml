@@ -10,24 +10,28 @@ fun printtree (outstream, s0) =
         fun space 0 = ""
           | space n = (ps " "; space (n-1)) 
 
-        fun stmt (T.SEQ(s1,s2),d)          = (space d; pse "SEQ("; stmt (s1,d+1); pse "," ; stmt (s2,d+1); ps ")" )
-          | stmt (T.LABEL l, d)            = (space d; ps "LABEL "; ps (Int.toString l)) 
-          | stmt (T.EXP e, d)              = (space d; pse "EXP("; expr (e,d+1); ps ")")
-          | stmt (T.MOVE (e1,e2),d)        = (space d; pse "MOVE("; expr (e1,d+1); pse ","; expr (e2,d+1); pse ")") 
-          | stmt (T.JUMP (e,_),d)          = (space d; pse "JUMP("; expr (e,d+1); ps ")")
-          | stmt (T.CJUMP (p,e1,e2,t,f),d) = (space d; ps "CJUMP("; expr (e1,d+1); ps ","; relOp p; ps ",";expr(e2,d+1); 
-                                              ps ","; space (d+1); ps (Int.toString t); ps ","; ps (Int.toString f); ps ")")
+        val indent = ref 0 
+        fun inc_indent () =(indent := !indent + 3)
+        fun dec_indent () =(indent := !indent - 3)
+
+        fun stmt (T.SEQ(s1,s2))          = (pse "SEQ("; inc_indent(); space(!indent);stmt (s1); pse "," ; space (!indent); stmt (s2); dec_indent(); ps ")" )
+          | stmt (T.LABEL l)            = (ps "LABEL "; ps (Int.toString l)) 
+          | stmt (T.EXP e)              = (pse "EXP("; inc_indent(); space (!indent); expr (e); dec_indent(); ps ")")
+          | stmt (T.MOVE (e1,e2))        = (ps "MOVE("; expr (e1); ps ","; expr (e2); ps ")") 
+          | stmt (T.JUMP (e,_))          = (ps "JUMP("; expr (e); ps ")")
+          | stmt (T.CJUMP (p,e1,e2,t,f)) = (ps "CJUMP("; expr (e1); ps ", "; relOp p; ps ",";expr(e2); 
+                                              ps ", "; ps (Int.toString t); ps ", "; ps (Int.toString f); ps ")")
 
         (* WARNING : the name of the variable of operator in T.CJUMP cannot be o or op *)
         (* WARNING : the name of the variable of operator in T.BINOP cannot be o or op [took 2 hrs to find the mistake] *)  
 
-        and expr (T.CONST i,d)             = (space d; ps "CONST "; ps (Int.toString i))
-          | expr (T.NAME n,d)              = (space d; ps "NAME "; ps (Int.toString n))
-          | expr (T.TEMP t,d)              = (space d; ps "TEMP "; ps (Int.toString t))  
-          | expr (T.BINOP (p,e1,e2),d)     = (space d; ps "BINOP( "; binop p; pse ","; expr(e1,d+1); pse ","; expr(e2,d+1); ps ")") 
-          | expr (T.MEM m, d)              = (space d; pse "MEM("; expr(m,d+1); ps ")")
-          | expr (T.CALL (e,el),d)         = (space d; pse "CALL("; expr(e,d+1); app (fn a => (pse ","; expr(a,d+2))) el; ps ")")  
-          | expr (T.ESEQ (s,e),d)          = (space d; ps "ESEQ("; stmt(s,d+1); pse ","; expr(e,d+1); ps ")") 
+        and expr (T.CONST i)             = (ps " CONST "; ps (Int.toString i))
+          | expr (T.NAME n)              = (ps "NAME "; ps (Int.toString n))
+          | expr (T.TEMP t)              = (ps "TEMP "; ps (Int.toString t))  
+          | expr (T.BINOP (p,e1,e2))     = (ps "BINOP("; binop p; ps ","; expr(e1); ps ","; expr(e2); ps ")") 
+          | expr (T.MEM m)              = (pse "MEM("; expr(m); ps ")")
+          | expr (T.CALL (e,el))         = (pse "CALL("; expr(e); app (fn a => (pse ","; expr(a))) el; ps ")")  
+          | expr (T.ESEQ (s,e))          = (ps "ESEQ(\n"; inc_indent(); space(!indent); stmt(s); pse ","; space(!indent); expr(e); dec_indent(); ps ")") 
 
         and binop T.PLUS     = ps "PLUS"
           | binop T.MINUS    = ps "MINUS"
@@ -52,7 +56,7 @@ fun printtree (outstream, s0) =
           | relOp T.UGEQ     = ps "UGEQ"
      
     in   
-        stmt(s0,0) ; pse "" ; TextIO.flushOut outstream  
+        stmt(s0) ; pse "" ; TextIO.flushOut outstream  
     end
 
 end
