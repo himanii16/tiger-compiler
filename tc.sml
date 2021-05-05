@@ -32,13 +32,11 @@ fun print_error (s,i:int,_) = TextIO.output(TextIO.stdErr, "Error, line " ^ (Int
 
 val (program,_) = TigerParser.parse (0,thisLexer,print_error,()) (* parsing *)
 
-val (ir_representation) = Translate.translate (program)
-
 val s = CommandLine.arguments() 
 
 fun customized_printing() = let fun PP () = TextIO.output(TextIO.stdOut,pp.compile(program)) 
                                 fun Ast () = PrintAst.print(TextIO.stdOut, program)
-                                fun IR  () = Printtree.printtree(TextIO.stdOut, ir_representation)
+                                fun IR  () = Printtree.printtree(TextIO.stdOut, Translate.translate (program))
                                 
                                 fun head (xs) = case xs of []  => "empty"
                                                 | ["--ast",_]  => "ast"
