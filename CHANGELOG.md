@@ -2,7 +2,7 @@
 
 ## Latest Change 
 
-The code is priting ir for only Binary operations, If conditions as per now. More things are yet to be added. 
+The code is priting ir for few test cases as per now. More things are yet to be added. 
 
 ## 2021-02-17
 
@@ -47,3 +47,7 @@ Did canonisation part. In that linearize and basic blocks, trace Schedule is yet
 ## 2021-04-27 
 
 Added skeleton structure for intermediate tree representation \[Incomplete\] and the printtree structure added. 
+
+## 2021-05-04
+
+Ir translation - Working for few test cases. Function declaration and calls are yet to be added. 
