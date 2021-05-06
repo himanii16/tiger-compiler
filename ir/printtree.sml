@@ -11,8 +11,8 @@ fun printtree (outstream, s0) =
           | space n = (ps " "; space (n-1)) 
 
         val indent = ref 0 
-        fun inc_indent () =(indent := !indent + 3)
-        fun dec_indent () =(indent := !indent - 3)
+        fun inc_indent () =(indent := !indent + 4)
+        fun dec_indent () =(indent := !indent - 4)
 
         fun stmt (T.SEQ(s1,s2))          = (pse "SEQ("; inc_indent(); space(!indent);stmt (s1); pse "," ; space (!indent); stmt (s2); dec_indent(); ps ")" )
           | stmt (T.LABEL l)            = (ps "LABEL "; ps (Int.toString l)) 

@@ -1,1 +1,23 @@
-if 2+3>5 then 3 
+let 
+    var y := 3
+    var x := 4
+    var z := 5
+in 
+    let var x := 10
+    in
+        x + y
+    end 
+    ;
+    if (y < 10 & z < 6)
+    then
+        y := y + 10
+    else 
+        z := y + 5 
+    ;
+    if (y > 11)
+    then 
+        y := y + 1
+    ;
+    x ; y ; z
+end
+

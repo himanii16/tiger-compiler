@@ -24,6 +24,7 @@ struct
 
     exception Error of string
     exception Unsupported of string
+    exception Undefined of string
     
     structure T = Tree
     structure A = Ast 
@@ -61,9 +62,13 @@ struct
     fun translate (prog) = 
     let 
       fun t_exp (Ast.Nil) env                                       = Ex (T.CONST 0)
+
         | t_exp (Ast.StringConst s) env                             = raise Unsupported "Not yet supported"
+
         | t_exp (Ast.IntConst i) env                                = Ex (T.CONST i)
-        | t_exp (Ast.Lvalue v) env                                  = raise Unsupported "Not yet supported"
+
+        | t_exp (Ast.Lvalue v) env                                  = Ex (t_var v env)
+
         | t_exp (Ast.BinOpExp{left,oper,right}) env                 = let val l       = unEx (t_exp left env)
                                                                           val r       = unEx (t_exp right env) 
                                                                           val exp_op  = case oper of 
@@ -82,12 +87,24 @@ struct
                                                                       in 
                                                                           exp_op
                                                                       end 
+
         | t_exp (Ast.FuncCall{func_id,fun_args}) env                = raise Unsupported "Not yet supported"
         | t_exp (Ast.ArrExp{arr_id,arr_size,first_i}) env           = raise Unsupported "Not yet supported"
-        | t_exp (Ast.SeqExp el) env                                 = raise Unsupported "Not yet supported"
+
+        | t_exp (Ast.SeqExp el) env                                 = let val stm_list = t_seq el env 
+                                                                      in 
+                                                                        Ex (T.ESEQ((seqstmt stm_list),T.CONST 0))
+                                                                      end
+        
         | t_exp (Ast.RecordExp{record_id,field_elem}) env           = raise Unsupported "Not yet supported"
-        | t_exp (Ast.AssignExp {assign_var,assignment}) env         = raise Unsupported "Not yet supported"
+        | t_exp (Ast.AssignExp {assign_var,assignment}) env         = let val e = unEx (t_exp assignment env)
+                                                                          val t = t_var assign_var env 
+                                                                      in 
+                                                                          Nx (T.MOVE(t, e)) 
+                                                                      end 
+
         | t_exp (Ast.NegativeExp e) env                             = Ex (T.BINOP (T.MINUS, T.CONST 0, unEx (t_exp e env))) 
+
         | t_exp (Ast.IfExp{if_cond,body_if,otherwise}) env          = let val r = Temp.newtemp()
                                                                           val t = Temp.newlabel()
                                                                           val f = Temp.newlabel()
@@ -102,6 +119,7 @@ struct
                                                                             T.LABEL res
                                                                           ], T.TEMP r))
                                                                       end 
+
         | t_exp (Ast.IfThenExp{ifthen_cond,body_ifthen}) env        = let val t = Temp.newlabel()
                                                                           val f = Temp.newlabel()
                                                                       in 
@@ -112,15 +130,49 @@ struct
                                                                             T.LABEL f
                                                                           ])
                                                                       end 
+
         | t_exp (Ast.WhileExp{test_cond,body_while}) env            = raise Unsupported "Not yet supported"
         | t_exp (Ast.ForExp{for_id,first_e,final_e,body_for}) env   = raise Unsupported "Not yet supported"
         | t_exp (Ast.BreakExp) env                                  = raise Unsupported "Not yet supported"
-        | t_exp (Ast.LetExp{decl,body_expr}) env                    = raise Unsupported "Not yet supported"
+        | t_exp (Ast.LetExp{decl,body_expr}) env                    = let val (list_stm , env_) = t_decl decl env
+                                                                      in 
+                                                                          Ex (T.ESEQ (seqstmt list_stm, unEx (t_exp body_expr env_)))  
+                                                                      end
+
+      and t_var (Ast.SimpleVar (i:Ast.id)) env = let val ot = Env.lookupVar i env  
+                                                  in 
+                                                      case ot of  
+                                                        SOME t => T.TEMP t 
+                                                      | NONE   => raise Undefined "variable"
+                                                  end 
+        | t_var (Ast.FieldVar (v,v1)) env      = raise Unsupported "Not yet supported"
+        | t_var (Ast.ArrVar (i:Ast.id, e)) env = raise Unsupported "Not yet supported"
+
+      and t_seq [] env       = []
+        | t_seq (e::el) env  = unNx (t_exp e env) :: (t_seq el env)
+
+      and t_decl [] env      = ([], env)
+        | t_decl (x::xs) env = let val (stm, env_) = t_dec x env 
+                                   val (s,e_) = (t_decl xs env_)
+                               in 
+                                  (stm::s,e_)
+                               end 
+
+          (* stm 1 :: (stm::xs) *)
+
 
       and t_dec (Ast.TypeDec tl) env = raise Unsupported "Not yet supported"
         | t_dec (Ast.FuncDec fl) env = raise Unsupported "Not yet supported"
-        | t_dec (Ast.VarDec vl) env  = raise Unsupported "Not yet supported"
+        | t_dec (Ast.VarDec vl) env  = tvar_dec(vl) env 
 
+      and tvar_dec (Ast.Varf{varf_id,varf_ty,varf_first}) env    = let
+                                                                      val t = Temp.newtemp() 
+                                                                      val env_ = Env.update varf_id t env 
+                                                                      val e = unEx (t_exp varf_first env) 
+                                                                   in 
+                                                                      (Tree.MOVE (Tree.TEMP t,e),env_ ) 
+                                                                   end
+    
       and t_expr (Ast.Expression E) = unNx (t_exp E Env.Envt)
 
     in 
