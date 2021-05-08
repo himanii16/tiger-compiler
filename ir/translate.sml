@@ -147,7 +147,28 @@ struct
                                                                         Nx stmts 
                                                                       end
 
-        | t_exp (Ast.ForExp{for_id,first_e,final_e,body_for}) env   = raise Unsupported "Not yet supported"
+        | t_exp (Ast.ForExp{for_id,first_e,final_e,body_for}) env   = let val t1    = Temp.newtemp()
+                                                                          val t2    = Temp.newtemp()
+                                                                          val loop  = Temp.newlabel()
+                                                                          val cntu  = Temp.newlabel()
+                                                                          val fnsh  = Temp.newlabel()
+                                                                          val env1  = Env.update for_id t1 env 
+                                                                          val body  = unNx (t_exp body_for env1)
+                                                                          val stmts = seqstmt([
+                                                                            T.MOVE (T.TEMP t1, unEx (t_exp first_e env)),
+                                                                            T.MOVE (T.TEMP t2, unEx (t_exp final_e env)),
+                                                                            T.LABEL loop,
+                                                                            T.CJUMP (T.NEQ, T.TEMP t1, T.TEMP t2, cntu, fnsh),
+                                                                            T.LABEL cntu,
+                                                                            body,
+                                                                            T.MOVE (T.TEMP t1, T.BINOP (T.PLUS, T.TEMP t1, T.CONST 1)),
+                                                                            T.JUMP (T.NAME loop,[loop]),
+                                                                            T.LABEL fnsh
+                                                                          ])
+                                                                        in 
+                                                                          Nx stmts 
+                                                                        end
+
         | t_exp (Ast.BreakExp) env                                  = raise Unsupported "Not yet supported"
         | t_exp (Ast.LetExp{decl,body_expr}) env                    = let val (list_stm , env_) = t_decl decl env
                                                                       in 

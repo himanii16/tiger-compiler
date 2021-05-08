@@ -22,7 +22,7 @@ fun printtree (outstream, s0) =
           | stmt (T.EXP e)              = (ps "EXP(";expr (e);ps ")")
           | stmt (T.MOVE (e1,e2))        = (ps "MOVE("; expr (e1); ps ", "; expr (e2); ps ")") 
           | stmt (T.JUMP (e,_))          = (ps "JUMP("; expr (e); ps ")")
-          | stmt (T.CJUMP (p,e1,e2,t,f)) = (ps "CJUMP("; expr (e1); ps ", "; relOp p; ps ", ";expr(e2); 
+          | stmt (T.CJUMP (p,e1,e2,t,f)) = (ps "CJUMP("; relOp p; ps ", "; expr (e1); ps ", ";expr(e2); 
                                               ps ", "; ps (Int.toString t); ps ", "; ps (Int.toString f); ps ")")
 
         (* WARNING : the name of the variable of operator in T.CJUMP cannot be o or op *)
