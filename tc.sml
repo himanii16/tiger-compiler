@@ -36,7 +36,7 @@ val s = CommandLine.arguments()
 
 fun customized_printing() = let fun PP () = TextIO.output(TextIO.stdOut,pp.compile(program)) 
                                 fun Ast () = PrintAst.print(TextIO.stdOut, program)
-                                fun IR  () = Printtree.printtree(TextIO.stdOut, Translate.translate (program))
+                                fun IR  () = Printtree.printtree(TextIO.stdOut, Canon.linearize(Translate.translate (program)))
                                 
                                 fun head (xs) = case xs of []  => "empty"
                                                 | ["--ast",_]  => "ast"

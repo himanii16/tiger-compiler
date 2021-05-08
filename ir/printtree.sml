@@ -1,5 +1,5 @@
 structure Printtree : 
-    sig val printtree : TextIO.outstream * Tree.stmt -> unit end =
+    sig val printtree : TextIO.outstream * Tree.stmt list -> unit end =
 struct
 
 structure T = Tree 
@@ -14,23 +14,26 @@ fun printtree (outstream, s0) =
         fun inc_indent () =(indent := !indent + 4)
         fun dec_indent () =(indent := !indent - 4)
 
-        fun stmt (T.SEQ(s1,s2))          = (pse "SEQ("; inc_indent(); space(!indent);stmt (s1); pse "," ; space (!indent); stmt (s2); dec_indent(); ps ")" )
+        fun stmt_l []                   = pse ""
+          | stmt_l (x::xs)              = (stmt x ; pse ""; stmt_l xs)
+
+        and stmt (T.SEQ(s1,s2))          = (pse "SEQ("; inc_indent(); space(!indent);stmt (s1); pse ", " ; space (!indent); stmt (s2); dec_indent(); ps ")" )
           | stmt (T.LABEL l)            = (ps "LABEL "; ps (Int.toString l)) 
-          | stmt (T.EXP e)              = (pse "EXP("; inc_indent(); space (!indent); expr (e); dec_indent(); ps ")")
-          | stmt (T.MOVE (e1,e2))        = (ps "MOVE("; expr (e1); ps ","; expr (e2); ps ")") 
+          | stmt (T.EXP e)              = (ps "EXP(";expr (e);ps ")")
+          | stmt (T.MOVE (e1,e2))        = (ps "MOVE("; expr (e1); ps ", "; expr (e2); ps ")") 
           | stmt (T.JUMP (e,_))          = (ps "JUMP("; expr (e); ps ")")
-          | stmt (T.CJUMP (p,e1,e2,t,f)) = (ps "CJUMP("; expr (e1); ps ", "; relOp p; ps ",";expr(e2); 
+          | stmt (T.CJUMP (p,e1,e2,t,f)) = (ps "CJUMP("; expr (e1); ps ", "; relOp p; ps ", ";expr(e2); 
                                               ps ", "; ps (Int.toString t); ps ", "; ps (Int.toString f); ps ")")
 
         (* WARNING : the name of the variable of operator in T.CJUMP cannot be o or op *)
         (* WARNING : the name of the variable of operator in T.BINOP cannot be o or op [took 2 hrs to find the mistake] *)  
 
-        and expr (T.CONST i)             = (ps " CONST "; ps (Int.toString i))
+        and expr (T.CONST i)             = (ps "CONST "; ps (Int.toString i))
           | expr (T.NAME n)              = (ps "NAME "; ps (Int.toString n))
           | expr (T.TEMP t)              = (ps "TEMP "; ps (Int.toString t))  
-          | expr (T.BINOP (p,e1,e2))     = (ps "BINOP("; binop p; ps ","; expr(e1); ps ","; expr(e2); ps ")") 
+          | expr (T.BINOP (p,e1,e2))     = (ps "BINOP("; binop p; ps ", "; expr(e1); ps ", "; expr(e2); ps ")") 
           | expr (T.MEM m)              = (pse "MEM("; expr(m); ps ")")
-          | expr (T.CALL (e,el))         = (pse "CALL("; expr(e); app (fn a => (pse ","; expr(a))) el; ps ")")  
+          | expr (T.CALL (e,el))         = (pse "CALL("; expr(e); app (fn a => (pse ", "; expr(a))) el; ps ")")  
           | expr (T.ESEQ (s,e))          = (ps "ESEQ(\n"; inc_indent(); space(!indent); stmt(s); pse ","; space(!indent); expr(e); dec_indent(); ps ")") 
 
         and binop T.PLUS     = ps "PLUS"
@@ -56,7 +59,7 @@ fun printtree (outstream, s0) =
           | relOp T.UGEQ     = ps "UGEQ"
      
     in   
-        stmt(s0) ; pse "" ; TextIO.flushOut outstream  
+        stmt_l(s0) ; pse "" ; TextIO.flushOut outstream  
     end
 
 end

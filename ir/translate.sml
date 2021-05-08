@@ -131,7 +131,22 @@ struct
                                                                           ])
                                                                       end 
 
-        | t_exp (Ast.WhileExp{test_cond,body_while}) env            = raise Unsupported "Not yet supported"
+        | t_exp (Ast.WhileExp{test_cond,body_while}) env            = let val check = unCx (t_exp test_cond env)
+                                                                          val ctnue = Temp.newlabel()
+                                                                          val t     = Temp.newlabel()
+                                                                          val fnsh  = Temp.newlabel()
+                                                                          val stmts = seqstmt ([
+                                                                            T.LABEL ctnue,
+                                                                            check (t, fnsh),
+                                                                            T.LABEL t,
+                                                                            T.EXP (unEx (t_exp body_while env)),
+                                                                            T.JUMP (T.NAME ctnue,[ctnue]),
+                                                                            T.LABEL fnsh 
+                                                                          ])
+                                                                      in
+                                                                        Nx stmts 
+                                                                      end
+
         | t_exp (Ast.ForExp{for_id,first_e,final_e,body_for}) env   = raise Unsupported "Not yet supported"
         | t_exp (Ast.BreakExp) env                                  = raise Unsupported "Not yet supported"
         | t_exp (Ast.LetExp{decl,body_expr}) env                    = let val (list_stm , env_) = t_decl decl env
@@ -139,12 +154,12 @@ struct
                                                                           Ex (T.ESEQ (seqstmt list_stm, unEx (t_exp body_expr env_)))  
                                                                       end
 
-      and t_var (Ast.SimpleVar (i:Ast.id)) env = let val ot = Env.lookupVar i env  
-                                                  in 
-                                                      case ot of  
-                                                        SOME t => T.TEMP t 
-                                                      | NONE   => raise Undefined "variable"
-                                                  end 
+        and t_var (Ast.SimpleVar (i:Ast.id)) env                    = let val ot = Env.lookupVar i env  
+                                                                      in 
+                                                                          case ot of  
+                                                                            SOME t => T.TEMP t 
+                                                                          | NONE   => raise Undefined "variable"
+                                                                      end 
         | t_var (Ast.FieldVar (v,v1)) env      = raise Unsupported "Not yet supported"
         | t_var (Ast.ArrVar (i:Ast.id, e)) env = raise Unsupported "Not yet supported"
 
@@ -157,9 +172,6 @@ struct
                                in 
                                   (stm::s,e_)
                                end 
-
-          (* stm 1 :: (stm::xs) *)
-
 
       and t_dec (Ast.TypeDec tl) env = raise Unsupported "Not yet supported"
         | t_dec (Ast.FuncDec fl) env = raise Unsupported "Not yet supported"

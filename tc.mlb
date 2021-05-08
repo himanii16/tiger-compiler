@@ -14,5 +14,6 @@ ir/tree.sig
 ir/tree.sml  
 ir/environment.sml
 ir/translate.sml
+ir/canon.sml
 ir/printtree.sml
 tc.sml 

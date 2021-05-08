@@ -1,0 +1,9 @@
+let 
+    var x := 2
+    var y := 1
+    var z := 3
+in
+    while z < 5 do 
+        z := z + 1
+    ;z
+end
