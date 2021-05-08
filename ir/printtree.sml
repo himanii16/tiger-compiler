@@ -14,7 +14,7 @@ fun printtree (outstream, s0) =
         fun inc_indent () =(indent := !indent + 4)
         fun dec_indent () =(indent := !indent - 4)
 
-        fun stmt_l []                   = pse ""
+        fun stmt_l []                   = ps ""
           | stmt_l (x::xs)              = (stmt x ; pse ""; stmt_l xs)
 
         and stmt (T.SEQ(s1,s2))          = (pse "SEQ("; inc_indent(); space(!indent);stmt (s1); pse ", " ; space (!indent); stmt (s2); dec_indent(); ps ")" )
@@ -59,7 +59,7 @@ fun printtree (outstream, s0) =
           | relOp T.UGEQ     = ps "UGEQ"
      
     in   
-        stmt_l(s0) ; pse "" ; TextIO.flushOut outstream  
+        stmt_l(s0) ; TextIO.flushOut outstream  
     end
 
 end
