@@ -4,5 +4,6 @@ let
 in
     for i := 10 to (15+3) do 
         (z := z + 1;
-         x := i+2)
+         x := i+2;
+         break)
 end

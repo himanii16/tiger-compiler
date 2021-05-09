@@ -138,11 +138,12 @@ struct
                                                                           val ctnue = Temp.newlabel()
                                                                           val t     = Temp.newlabel()
                                                                           val fnsh  = Temp.newlabel()
+                                                                          val env1  = Env.update "break" (fnsh) env
                                                                           val stmts = seqstmt ([
                                                                             T.LABEL ctnue,
                                                                             check (t, fnsh),
                                                                             T.LABEL t,
-                                                                            T.EXP (unEx (t_exp body_while env)),
+                                                                            T.EXP (unEx (t_exp body_while env1)),
                                                                             T.JUMP (T.NAME ctnue,[ctnue]),
                                                                             T.LABEL fnsh 
                                                                           ])
@@ -156,6 +157,7 @@ struct
                                                                           val cntu  = Temp.newlabel()
                                                                           val fnsh  = Temp.newlabel()
                                                                           val env1  = Env.update for_id t1 env 
+                                                                          val env1  = Env.update "break" (fnsh) env1 
                                                                           val body  = unNx (t_exp body_for env1)
                                                                           val stmts = seqstmt([
                                                                             T.MOVE (T.TEMP t1, unEx (t_exp first_e env)),
@@ -172,7 +174,13 @@ struct
                                                                           Nx stmts 
                                                                         end
 
-        | t_exp (Ast.BreakExp) env                                  = raise Unsupported "Not yet supported"
+        | t_exp (Ast.BreakExp) env                                  = let val ol = Env.lookupVar "break" env  
+                                                                      in 
+                                                                          case ol of  
+                                                                            SOME label => Nx (T.JUMP (T.NAME label, [label]))
+                                                                          | NONE       => raise Error "Break not in loop"
+                                                                      end 
+
         | t_exp (Ast.LetExp{decl,body_expr}) env                    = let val (list_stm , env_) = t_decl decl env
                                                                       in 
                                                                           Ex (T.ESEQ (seqstmt list_stm, unEx (t_exp body_expr env_)))  
@@ -184,6 +192,7 @@ struct
                                                                             SOME t => T.TEMP t 
                                                                           | NONE   => raise Undefined "variable"
                                                                       end 
+
         | t_var (Ast.FieldVar (v,v1)) env      = raise Unsupported "Not yet supported"
         | t_var (Ast.ArrVar (i:Ast.id, e)) env = raise Unsupported "Not yet supported"
 
