@@ -163,7 +163,7 @@ struct
                                                                             T.MOVE (T.TEMP t1, unEx (t_exp first_e env)),
                                                                             T.MOVE (T.TEMP t2, unEx (t_exp final_e env)),
                                                                             T.LABEL loop,
-                                                                            T.CJUMP (T.NEQ, T.TEMP t1, T.TEMP t2, cntu, fnsh),
+                                                                            T.CJUMP (T.LEQ, T.TEMP t1, T.TEMP t2, cntu, fnsh),
                                                                             T.LABEL cntu,
                                                                             body,
                                                                             T.MOVE (T.TEMP t1, T.BINOP (T.PLUS, T.TEMP t1, T.CONST 1)),

@@ -63,7 +63,7 @@
 
 PROGRAM : EXP                 (Ast.Expression EXP)
 
-EXPS :                         ([])
+EXPS :                         ([Ast.Nil])
      | EXP                     ([EXP])
      | EXP SEMICOLON EXPS      (EXP :: EXPS)
 
