@@ -34,7 +34,7 @@ struct
                  | Cx of Temp.label * Temp.label -> T.stmt 
                          (* ----- genstmt ---- *)
 
-    fun seqstmt []  = raise Error "not allowed"
+    fun seqstmt []  = T.EXP (T.CONST 0)
       | seqstmt [s] = s 
       | seqstmt (s::sl) = T.SEQ(s,seqstmt sl)
 
@@ -58,6 +58,9 @@ struct
     fun unCx (Cx c) = c 
       | unCx (Ex e) = (fn (t,f) => T.CJUMP(T.NEQ, e, T.CONST 0, t,f)) 
       | unCx (Nx s) = raise Error "Program not well typed" (*will never occur in compiling a well-typed Tiger Program*)
+    
+    fun elm [a]    = a 
+      | elm _      = raise Error "Will not occur"
     
     fun translate (prog) = 
     let 
@@ -91,9 +94,9 @@ struct
         | t_exp (Ast.FuncCall{func_id,fun_args}) env                = raise Unsupported "Not yet supported"
         | t_exp (Ast.ArrExp{arr_id,arr_size,first_i}) env           = raise Unsupported "Not yet supported"
 
-        | t_exp (Ast.SeqExp el) env                                 = let val stm_list = t_seq el env 
+        | t_exp (Ast.SeqExp el) env                                 = let val (seq_l, seq_exp) = t_seq el [] env
                                                                       in 
-                                                                        Ex (T.ESEQ((seqstmt stm_list),T.CONST 0))
+                                                                        Ex (T.ESEQ((seqstmt seq_l),elm seq_exp))
                                                                       end
         
         | t_exp (Ast.RecordExp{record_id,field_elem}) env           = raise Unsupported "Not yet supported"
@@ -184,8 +187,9 @@ struct
         | t_var (Ast.FieldVar (v,v1)) env      = raise Unsupported "Not yet supported"
         | t_var (Ast.ArrVar (i:Ast.id, e)) env = raise Unsupported "Not yet supported"
 
-      and t_seq [] env       = []
-        | t_seq (e::el) env  = unNx (t_exp e env) :: (t_seq el env)
+      and t_seq [] seq_l env      = (seq_l, [])
+        | t_seq [a] seq_l env     = (seq_l,[unEx (t_exp a env)])
+        | t_seq (a::al) seq_l env = t_seq al (seq_l@ [unNx (t_exp a env)]) env
 
       and t_decl [] env      = ([], env)
         | t_decl (x::xs) env = let val (stm, env_) = t_dec x env 

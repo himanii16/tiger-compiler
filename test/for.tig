@@ -2,7 +2,7 @@ let
     var z := 3
     var x := 1
 in
-    for i := 10 to 15 do 
+    for i := 10 to (15+3) do 
         (z := z + 1;
          x := i+2)
 end
