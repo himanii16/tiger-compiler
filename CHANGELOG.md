@@ -2,7 +2,7 @@
 
 ## Latest Change 
 
-The code is priting ir for few test cases as per now. More things are yet to be added. 
+IR printing - Working for all except function calls and function declarations.
 
 ## 2021-02-17
 
