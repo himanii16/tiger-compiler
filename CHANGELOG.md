@@ -12,6 +12,8 @@ The output of lab4 can't be read through .out file, for that purpose, it would t
 
 Date of this commit: 22 Apr 
 
+Kindly choose best out of the two for both the labs.
+
 ## UPDATE IN LAB5, LAB6
 
 IR printing - Working for all except function declarations and calls.
