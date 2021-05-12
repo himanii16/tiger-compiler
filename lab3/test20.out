@@ -1,0 +1,11 @@
+Program( WhileExp(
+  BinOpExp(GT,
+   IntConst(10),
+   IntConst(5)),
+  SeqExp[
+   BinOpExp(Plus,
+    Lvalue(
+     SimpleVar(i)),
+    IntConst(1)),
+   SeqExp[
+    Nil]]))

@@ -1,0 +1,12 @@
+Program( LetExp([
+  TypeDec[
+   (rectype,
+    record[
+     (name,string),
+     (id,int)])],
+  VarDec[  (a,[],
+  NONE,
+   Nil)]],
+  SeqExp[
+   Lvalue(
+    SimpleVar(a))]))

@@ -1,0 +1,191 @@
+Program( LetExp([
+  VarDec[  (N,[],
+  NONE,
+   IntConst(8))],
+  TypeDec[
+   (intArray,
+    arr(int))],
+  VarDec[  (row,[],
+  NONE,
+   ArrExp(intArray,
+    Lvalue(
+     SimpleVar(N)),
+    IntConst(0)))],
+  VarDec[  (col,[],
+  NONE,
+   ArrExp(intArray,
+    Lvalue(
+     SimpleVar(N)),
+    IntConst(0)))],
+  VarDec[  (diag1,[],
+  NONE,
+   ArrExp(intArray,
+    BinOpExp(Minus,
+     BinOpExp(Plus,
+      Lvalue(
+       SimpleVar(N)),
+      Lvalue(
+       SimpleVar(N))),
+     IntConst(1)),
+    IntConst(0)))],
+  VarDec[  (diag2,[],
+  NONE,
+   ArrExp(intArray,
+    BinOpExp(Minus,
+     BinOpExp(Plus,
+      Lvalue(
+       SimpleVar(N)),
+      Lvalue(
+       SimpleVar(N))),
+     IntConst(1)),
+    IntConst(0)))],
+  FuncDec[
+   (printboard,[],
+   NONE,
+    SeqExp[
+     ForExp(i,,
+      IntConst(0),
+      BinOpExp(Minus,
+       Lvalue(
+        SimpleVar(N)),
+       IntConst(1)),
+      SeqExp[
+       ForExp(j,,
+        IntConst(0),
+        BinOpExp(Minus,
+         Lvalue(
+          SimpleVar(N)),
+         IntConst(1)),
+        FuncCall(print,[
+         IfExp(
+          BinOpExp(EQ,
+           Lvalue(
+            ArrVar(
+col,
+             Lvalue(
+              SimpleVar(i)))),
+           Lvalue(
+            SimpleVar(j))),
+          StringConst(" O"),
+          StringConst(" ."))])),
+       FuncCall(print,[
+        StringConst("\n")])]),
+     FuncCall(print,[
+      StringConst("\n")])]),
+   (try,[
+    (c,int)],
+   NONE,
+    SeqExp[
+     IfExp(
+      BinOpExp(EQ,
+       Lvalue(
+        SimpleVar(c)),
+       Lvalue(
+        SimpleVar(N))),
+      FuncCall(printboard,[]),
+      ForExp(r,,
+       IntConst(0),
+       BinOpExp(Minus,
+        Lvalue(
+         SimpleVar(N)),
+        IntConst(1)),
+       IfExp(
+        BinOpExp(AND,
+         BinOpExp(AND,
+          BinOpExp(EQ,
+           Lvalue(
+            ArrVar(
+row,
+             Lvalue(
+              SimpleVar(r)))),
+           IntConst(0)),
+          BinOpExp(EQ,
+           Lvalue(
+            ArrVar(
+diag1,
+             BinOpExp(Plus,
+              Lvalue(
+               SimpleVar(r)),
+              Lvalue(
+               SimpleVar(c))))),
+           IntConst(0))),
+         BinOpExp(EQ,
+          Lvalue(
+           ArrVar(
+diag2,
+            BinOpExp(Minus,
+             BinOpExp(Plus,
+              Lvalue(
+               SimpleVar(r)),
+              IntConst(7)),
+             Lvalue(
+              SimpleVar(c))))),
+          IntConst(0))),
+        SeqExp[
+         AssignExp(
+          ArrVar(
+row,
+           Lvalue(
+            SimpleVar(r))),
+          IntConst(1)),
+         AssignExp(
+          ArrVar(
+diag1,
+           BinOpExp(Plus,
+            Lvalue(
+             SimpleVar(r)),
+            Lvalue(
+             SimpleVar(c)))),
+          IntConst(1)),
+         AssignExp(
+          ArrVar(
+diag2,
+           BinOpExp(Minus,
+            BinOpExp(Plus,
+             Lvalue(
+              SimpleVar(r)),
+             IntConst(7)),
+            Lvalue(
+             SimpleVar(c)))),
+          IntConst(1)),
+         AssignExp(
+          ArrVar(
+col,
+           Lvalue(
+            SimpleVar(c))),
+          Lvalue(
+           SimpleVar(r))),
+         FuncCall(try,[
+          BinOpExp(Plus,
+           Lvalue(
+            SimpleVar(c)),
+           IntConst(1))]),
+         AssignExp(
+          ArrVar(
+row,
+           Lvalue(
+            SimpleVar(r))),
+          IntConst(0)),
+         AssignExp(
+          ArrVar(
+diag1,
+           BinOpExp(Plus,
+            Lvalue(
+             SimpleVar(r)),
+            Lvalue(
+             SimpleVar(c)))),
+          IntConst(0)),
+         AssignExp(
+          ArrVar(
+diag2,
+           BinOpExp(Minus,
+            BinOpExp(Plus,
+             Lvalue(
+              SimpleVar(r)),
+             IntConst(7)),
+            Lvalue(
+             SimpleVar(c)))),
+          IntConst(0))])))])]],
+  SeqExp[
+   FuncCall(try,[
+    IntConst(0)])]))

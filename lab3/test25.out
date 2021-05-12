@@ -1,0 +1,9 @@
+Program( LetExp([
+  VarDec[  (d,[],
+  NONE,
+   IntConst(0))]],
+  SeqExp[
+   Lvalue(
+    FieldVar(
+     SimpleVar(d),
+          SimpleVar(f)))]))

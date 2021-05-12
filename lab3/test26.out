@@ -1,0 +1,3 @@
+Program( BinOpExp(Plus,
+  IntConst(3),
+  StringConst("var")))

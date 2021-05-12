@@ -1,0 +1,25 @@
+Program( LetExp([
+  TypeDec[
+   (intlist,
+    record[
+     (hd,int),
+     (tl,intlist)]),
+   (tree,
+    record[
+     (key,int),
+     (children,treelist)]),
+   (treelist,
+    record[
+     (hd,tree),
+     (tl,treelist)])],
+  VarDec[  (lis,[],
+  SOME(intlist),
+   RecordExp(intlist,[
+
+    (tl,
+     Nil),
+    (hd,
+     IntConst(0))]))]],
+  SeqExp[
+   Lvalue(
+    SimpleVar(lis))]))

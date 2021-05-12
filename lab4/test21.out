@@ -1,0 +1,12 @@
+[1;35mlet
+[0m    [1;36mfunction [0m[1;33mnfactor[0m(n:[1;30mint[0m)[1;35m = 
+[0m        [1;34mif [0mn [1;31m=[0m [1;94m0[0m[1;34m then
+[0m            [1;94m1[0m
+        [1;34melse
+[0m            n [1;31m*[0m nfactor(n [1;31m-[0m [1;94m1[0m)
+[1;35min
+[0m    (
+    nfactor([1;94m10[0m)
+    )
+[1;35mend
+[0m

@@ -1,0 +1,18 @@
+Program( LetExp([
+  TypeDec[
+   (rectype,
+    record[
+     (name,string),
+     (id,int)])],
+  VarDec[  (b,[],
+  SOME(rectype),
+   Nil)]],
+  SeqExp[
+   BinOpExp(EQ,
+    Lvalue(
+     SimpleVar(b)),
+    Nil),
+   BinOpExp(NEQ,
+    Lvalue(
+     SimpleVar(b)),
+    Nil)]))

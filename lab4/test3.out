@@ -1,0 +1,10 @@
+[1;35mlet
+[0m    [1;32mtype [0mrectype[1;35m = [0m{name:[1;30mstring[0m, age:[1;30mint[0m}
+    [1;32mvar [0mrec1:[1;30mrectype[0m[1;35m := [0mrectype {age = [1;94m1000[0m, name = [91mNobody[0m}
+[1;35min
+[0m    (
+    rec1.name[1;35m := [0m[91mSomebody[0m; 
+    rec1
+    )
+[1;35mend
+[0m

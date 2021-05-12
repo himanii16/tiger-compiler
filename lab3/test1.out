@@ -1,0 +1,12 @@
+Program( LetExp([
+  TypeDec[
+   (arrtype,
+    arr(int))],
+  VarDec[  (arr1,[],
+  SOME(arrtype),
+   ArrExp(arrtype,
+    IntConst(10),
+    IntConst(0)))]],
+  SeqExp[
+   Lvalue(
+    SimpleVar(arr1))]))

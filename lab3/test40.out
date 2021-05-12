@@ -1,0 +1,10 @@
+Program( LetExp([
+  FuncDec[
+   (g,[
+    (a,int)],
+   NONE,
+    Lvalue(
+     SimpleVar(a)))]],
+  SeqExp[
+   FuncCall(g,[
+    IntConst(2)])]))
