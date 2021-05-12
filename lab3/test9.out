@@ -1,7 +1,0 @@
-Program( IfExp(
-  SeqExp[
-   BinOpExp(GT,
-    IntConst(5),
-    IntConst(4))],
-  IntConst(13),
-  StringConst(" ")))

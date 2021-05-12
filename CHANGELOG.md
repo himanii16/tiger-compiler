@@ -1,19 +1,5 @@
 ## To add changes made in project each week
 
-## EVALUTAION LAB3 LAB4
-
-Consider the commit for both lab3 and lab4 with hash: a8ff60c0d17c23db2585eccaede0aee7979fa13e
-
-Commands to run this: make , ./tc filename --ast , ./tc filename --pp
-
-Outputs for the labs in respective folder - lab3 and lab4
-
-The output of lab4 can't be read through .out file, for that purpose, it would then require you to print them on terminal itself.
-
-Date of this commit: 22 Apr 
-
-Kindly choose best out of the two for both the labs.
-
 ## UPDATE IN LAB5, LAB6
 
 IR printing - Working for all except function declarations and calls.

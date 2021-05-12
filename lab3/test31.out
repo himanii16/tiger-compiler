@@ -1,7 +1,0 @@
-Program( LetExp([
-  VarDec[  (a,[],
-  SOME(int),
-   StringConst(" "))]],
-  SeqExp[
-   Lvalue(
-    SimpleVar(a))]))

@@ -1,9 +1,0 @@
-[1;35mlet
-[0m    [1;32mtype [0mrectype[1;35m = [0m{name:[1;30mstring[0m, id:[1;30mint[0m}
-    [1;32mvar [0mrec1[1;35m := [0mrectype {id = [1;94m0[0m, name = [91mName[0m}
-[1;35min
-[0m    (
-    rec1.nam[1;35m := [0m[91masd[0m
-    )
-[1;35mend
-[0m

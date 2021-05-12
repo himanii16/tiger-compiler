@@ -1,9 +1,0 @@
-Program( ForExp(i,,
-  IntConst(10),
-  StringConst(" "),
-  AssignExp(
-   SimpleVar(i),
-   BinOpExp(Minus,
-    Lvalue(
-     SimpleVar(i)),
-    IntConst(1)))))

@@ -1,3 +1,0 @@
-Program( IfExp(
-  IntConst(20),
-  IntConst(3)))

@@ -1,3 +1,0 @@
-Program( BinOpExp(GT,
-  IntConst(3),
-  StringConst("df")))
