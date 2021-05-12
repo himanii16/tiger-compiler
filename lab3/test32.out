@@ -1,0 +1,11 @@
+Program( LetExp([
+  TypeDec[
+   (arrayty,
+    arr(int))],
+  VarDec[  (a,[],
+  NONE,
+   ArrExp(arrayty,
+    IntConst(10),
+    StringConst(" ")))]],
+  SeqExp[
+   IntConst(0)]))

@@ -1,0 +1,25 @@
+Program( LetExp([
+  TypeDec[
+   (rectype,
+    record[
+     (name,string),
+     (id,int)])],
+  VarDec[  (rec1,[],
+  NONE,
+   RecordExp(rectype,[
+
+    (id,
+     IntConst(0)),
+    (name,
+     StringConst("aname"))]))]],
+  SeqExp[
+   AssignExp(
+    FieldVar(
+     SimpleVar(rec1),
+          SimpleVar(name)),
+    IntConst(3)),
+   AssignExp(
+    FieldVar(
+     SimpleVar(rec1),
+          SimpleVar(id)),
+    StringConst(""))]))

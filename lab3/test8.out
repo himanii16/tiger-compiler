@@ -1,0 +1,7 @@
+Program( IfExp(
+  SeqExp[
+   BinOpExp(GT,
+    IntConst(10),
+    IntConst(20))],
+  IntConst(30),
+  IntConst(40)))

@@ -1,0 +1,12 @@
+Program( LetExp([
+  TypeDec[
+   (a,
+    alias(int))],
+  VarDec[  (b,[],
+  NONE,
+   IntConst(4))],
+  TypeDec[
+   (a,
+    alias(string))]],
+  SeqExp[
+   IntConst(0)]))

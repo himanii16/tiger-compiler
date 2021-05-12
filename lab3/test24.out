@@ -1,0 +1,9 @@
+Program( LetExp([
+  VarDec[  (d,[],
+  NONE,
+   IntConst(0))]],
+  SeqExp[
+   Lvalue(
+    ArrVar(
+d,
+     IntConst(3)))]))

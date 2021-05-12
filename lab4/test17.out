@@ -1,0 +1,10 @@
+[1;35mlet
+[0m    [1;32mtype [0mtree[1;35m = [0m{key:[1;30mint[0m, children:[1;30mtreelist[0m}
+    [1;32mvar [0md:[1;30mint[0m[1;35m := [0m[1;94m0[0m
+    [1;32mtype [0mtreelist[1;35m = [0m{hd:[1;30mtree[0m, tl:[1;30mtreelist[0m}
+[1;35min
+[0m    (
+    d
+    )
+[1;35mend
+[0m

@@ -1,0 +1,9 @@
+Program( LetExp([
+  VarDec[  (a,[],
+  NONE,
+   IntConst(0))],
+  VarDec[  (a,[],
+  NONE,
+   IntConst(1))]],
+  SeqExp[
+   IntConst(0)]))

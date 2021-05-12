@@ -1,0 +1,113 @@
+Program( LetExp([
+  TypeDec[
+   (arrtype1,
+    arr(int)),
+   (rectype1,
+    record[
+     (name,string),
+     (address,string),
+     (id,int),
+     (age,int)]),
+   (arrtype2,
+    arr(rectype1)),
+   (rectype2,
+    record[
+     (name,string),
+     (dates,arrtype1)]),
+   (arrtype3,
+    arr(string))],
+  VarDec[  (arr1,[],
+  NONE,
+   ArrExp(arrtype1,
+    IntConst(10),
+    IntConst(0)))],
+  VarDec[  (arr2,[],
+  NONE,
+   ArrExp(arrtype2,
+    IntConst(5),
+    RecordExp(rectype1,[
+
+     (age,
+      IntConst(0)),
+     (id,
+      IntConst(0)),
+     (address,
+      StringConst("somewhere")),
+     (name,
+      StringConst("aname"))])))],
+  VarDec[  (arr3,[],
+  SOME(arrtype3),
+   ArrExp(arrtype3,
+    IntConst(100),
+    StringConst("")))],
+  VarDec[  (rec1,[],
+  NONE,
+   RecordExp(rectype1,[
+
+    (age,
+     IntConst(44)),
+    (id,
+     IntConst(2432)),
+    (address,
+     StringConst("Kapou")),
+    (name,
+     StringConst("Kapoios"))]))],
+  VarDec[  (rec2,[],
+  NONE,
+   RecordExp(rectype2,[
+
+    (dates,
+     ArrExp(arrtype1,
+      IntConst(3),
+      IntConst(1900))),
+    (name,
+     StringConst("Allos"))]))]],
+  SeqExp[
+   AssignExp(
+    ArrVar(
+arr1,
+     IntConst(0)),
+    IntConst(1)),
+   AssignExp(
+    ArrVar(
+arr1,
+     IntConst(9)),
+    IntConst(3)),
+   AssignExp(
+    FieldVar(
+     ArrVar(
+arr2,
+      IntConst(3)),
+          SimpleVar(name)),
+    StringConst("kati")),
+   AssignExp(
+    FieldVar(
+     ArrVar(
+arr2,
+      IntConst(1)),
+          SimpleVar(age)),
+    IntConst(23)),
+   AssignExp(
+    ArrVar(
+arr3,
+     IntConst(34)),
+    StringConst("sfd")),
+   AssignExp(
+    FieldVar(
+     SimpleVar(rec1),
+          SimpleVar(name)),
+    StringConst("sdf")),
+   AssignExp(
+    FieldVar(
+     SimpleVar(rec2),
+          ArrVar(
+dates,
+      IntConst(0))),
+    IntConst(2323)),
+   AssignExp(
+    FieldVar(
+     SimpleVar(rec2),
+          ArrVar(
+dates,
+      IntConst(2))),
+    IntConst(2323))]))

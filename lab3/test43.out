@@ -1,0 +1,10 @@
+Program( LetExp([
+  VarDec[  (a,[],
+  NONE,
+   SeqExp[
+    Nil])]],
+  SeqExp[
+   BinOpExp(Plus,
+    Lvalue(
+     SimpleVar(a)),
+    IntConst(3))]))

@@ -1,0 +1,10 @@
+[1;35mlet
+[0m    [1;32mtype [0mrectype[1;35m = [0m{name:[1;30mstring[0m, id:[1;30mint[0m}
+    [1;32mvar [0mrec1[1;35m := [0mrectype {id = [1;94m0[0m, name = [91maname[0m}
+[1;35min
+[0m    (
+    rec1.name[1;35m := [0m[1;94m3[0m; 
+    rec1.id[1;35m := [0m[91m[0m
+    )
+[1;35mend
+[0m

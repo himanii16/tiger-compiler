@@ -1,0 +1,12 @@
+Program( LetExp([
+  TypeDec[
+   (a,
+    alias(c)),
+   (b,
+    alias(a)),
+   (c,
+    alias(d)),
+   (d,
+    alias(a))]],
+  SeqExp[
+   StringConst("")]))
