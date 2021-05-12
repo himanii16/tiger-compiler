@@ -8,7 +8,7 @@ Commands to run this: make , ./tc filename --ast , ./tc filename --pp
 
 Outputs for the labs in respective folder - lab3 and lab4
 
-The output of lab4 is there in the pdf inside the lab4 folder. On typing command - `make test` , we can get the result for all the test cases on the terminal for pretty printing and the output for ast will be stored in folder lab3.
+The output of lab4 is there in the pdf inside the lab4 folder. On typing command - `make test` , we can get the result for all the test cases on the terminal for pretty printing.
 
 Date of this commit: 22 Apr 
 
