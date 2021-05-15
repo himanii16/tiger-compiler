@@ -24,6 +24,7 @@ val thisLexer = case CommandLine.arguments() of
                         if (x1="--ast") then  lexer (x2)
                         else if (x1="--pp") then lexer(x2)
                         else if (x1="--ir") then lexer(x2)
+                        else if (x1="--can") then lexer(x2) 
                         else lexer(x1) 
                         end 
 		 |  _   => (TextIO.output(TextIO.stdErr, "usage: tc file"); OS.Process.exit OS.Process.failure)
@@ -36,7 +37,8 @@ val s = CommandLine.arguments()
 
 fun customized_printing() = let fun PP () = TextIO.output(TextIO.stdOut,pp.compile(program)) 
                                 fun Ast () = PrintAst.print(TextIO.stdOut, program)
-                                fun IR  () = Printtree.printtree(TextIO.stdOut, Canon.linearize(Translate.translate (program)))
+                                fun CAN  () = Printtree.printtree(TextIO.stdOut, Canon.linearize(Translate.translate (program)))
+                                fun IR  () = Printtree.printtree(TextIO.stdOut, [Translate.translate (program)])
                                 
                                 fun head (xs) = case xs of []  => "empty"
                                                 | ["--ast",_]  => "ast"
@@ -45,10 +47,13 @@ fun customized_printing() = let fun PP () = TextIO.output(TextIO.stdOut,pp.compi
                                                 | [_,"--pp"]   => "pp" 
                                                 | [_,"--ir"]   => "ir"
                                                 | ["--ir",_]   => "ir"
+                                                | [_,"--can"]   => "can"
+                                                | ["--can",_]   => "can"
                                                 | _            => "none"
                             in 
                                 if head(s) = "ast" then Ast()
                                 else if head(s) = "ir" then IR()
+                                else if head(s) = "can" then CAN()
                                 else PP()
                             end 
 

@@ -1,0 +1,8 @@
+let
+    var z := 3
+in
+    while z < 5 do 
+        (z := z + 1;
+        if (z>10) then break)
+    ;z
+end

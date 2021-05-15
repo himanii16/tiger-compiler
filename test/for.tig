@@ -1,0 +1,11 @@
+let 
+    var x := 1
+    var y := 2
+    var z := 3
+in 
+    for i:=10 to 20 do 
+       ( x := x + 1;
+        y := y + 2;
+        z := x + y);
+    x;y;z
+end 

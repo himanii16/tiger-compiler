@@ -1,0 +1,15 @@
+let 
+    var x := 1
+    var y := 2
+    var z := 3
+in 
+    let 
+        var x := 5
+        var z := 3
+    in 
+        x + y + z
+    end ;
+    
+    x + y + z 
+
+end 
