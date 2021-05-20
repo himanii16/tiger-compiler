@@ -5,6 +5,7 @@
 Consider the commit for both lab5 and lab6 with hash: df2d79bc2f1eec452d0a875f4354e9f81d3158fb
 
 Command to run lab5: make , ./tc filename --can 
+
 Command to run lab6: make , ./tc filename --ir
 
 Date of this commit: 20 May
