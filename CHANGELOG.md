@@ -2,6 +2,17 @@
 
 ## LAB5, LAB6 EVALUATION
 
+### LAB 5 
+
+Consider the commit with hash: b1438d762323b721525bf9d85d30109983427da2
+
+Date of this commit - 26 Apr
+
+This lab was given before the lab6 work, but to check this lab, we require lab6 to be completed. This lab included a file ir/canon.sml.
+It was completed on 26 Apr with the given hash and from then no change has been made (can be verified by comparing both the hashes), but to check this, one need to use the hash provided for lab 6. 
+
+### LAB 6
+
 Consider the commit for both lab5 and lab6 with hash: df2d79bc2f1eec452d0a875f4354e9f81d3158fb
 
 Command to run lab5: make , ./tc filename --can 
