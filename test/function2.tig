@@ -1,0 +1,12 @@
+/* define valid mutually recursive procedures */
+let
+    var a := 3
+    function one(a: int, b: int)=
+            two (a+b)
+
+    function two (d: int) =
+            one(d, a)
+
+in
+    one(3,4)
+end

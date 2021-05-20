@@ -22,9 +22,9 @@ end
 structure Translate : TRANSLATE = 
 struct 
 
-    exception Error of string
-    exception Unsupported of string
-    exception Undefined of string
+    exception Error 
+    exception Unsupported 
+    exception Undefined 
     
     structure T = Tree
     structure A = Ast 
@@ -58,16 +58,16 @@ struct
 
     fun unCx (Cx c) = c 
       | unCx (Ex e) = (fn (t,f) => T.CJUMP(T.NEQ, e, T.CONST 0, t,f)) 
-      | unCx (Nx s) = raise Error "Program not well typed" (*will never occur in compiling a well-typed Tiger Program*)
+      | unCx (Nx s) = (print("Program not well typed\n"); raise Error ) (*will never occur in compiling a well-typed Tiger Program*)
     
     fun elm [a]    = a 
-      | elm _      = raise Error "Will not occur"
+      | elm _      = (print("Will not occur\n"); raise Error )
 
     fun translate (prog) = 
     let 
       fun t_exp (Ast.Nil) env fenv                                      = Ex (T.CONST 0)
 
-        | t_exp (Ast.StringConst s) env fenv                            = raise Unsupported "Not yet supported"
+        | t_exp (Ast.StringConst s) env fenv                            = (print("Not yet supported\n"); raise Unsupported )
 
         | t_exp (Ast.IntConst i) env fenv                               = Ex (T.CONST i)
 
@@ -97,18 +97,21 @@ struct
                                                                                 | args (xs::xl) = (unEx (t_exp xs env fenv))::args xl 
                                                                           in 
                                                                               case ot of  
-                                                                                SOME t => Ex (T.CALL (T.NAME t,args fun_args ))
-                                                                              | NONE   => raise Undefined "function"
+                                                                                SOME (t,n) => if n = List.length(fun_args) 
+                                                                                              then Ex (T.CALL (T.NAME t,args fun_args ))
+                                                                                              else(print("No. of arguments didn't match\n"); raise Error )
+
+                                                                              | NONE   => (print("function not defined\n"); raise Undefined )
                                                                           end 
 
-        | t_exp (Ast.ArrExp{arr_id,arr_size,first_i}) env fenv          = raise Unsupported "Not yet supported"
+        | t_exp (Ast.ArrExp{arr_id,arr_size,first_i}) env fenv          = (print("Array Not yet supported\n"); raise Unsupported )
 
         | t_exp (Ast.SeqExp el) env fenv                                = let val (seq_l, seq_exp) = t_seq el [] env fenv
                                                                           in 
                                                                             Ex (T.ESEQ((seqstmt seq_l),elm seq_exp))
                                                                           end
         
-        | t_exp (Ast.RecordExp{record_id,field_elem}) env fenv      = raise Unsupported "Not yet supported"
+        | t_exp (Ast.RecordExp{record_id,field_elem}) env fenv      = (print("Record Not yet supported\n"); raise Unsupported )
         | t_exp (Ast.AssignExp {assign_var,assignment}) env fenv    = let val e = unEx (t_exp assignment env fenv)
                                                                           val t = t_var assign_var env fenv 
                                                                       in 
@@ -187,7 +190,7 @@ struct
                                                                       in 
                                                                           case ol of  
                                                                             SOME label => Nx (T.JUMP (T.NAME label, [label]))
-                                                                          | NONE       => raise Error "Break not in loop"
+                                                                          | NONE       =>(print("Break not in loop\n"); raise Error) 
                                                                       end 
 
         | t_exp (Ast.LetExp{decl,body_expr}) env fenv               = let val (list_stm , env_, fenv) = t_decl decl env fenv
@@ -199,11 +202,11 @@ struct
                                                                       in 
                                                                           case ot of  
                                                                             SOME t => T.TEMP t 
-                                                                          | NONE   => raise Undefined "variable"
+                                                                          | NONE   => (print("undefined variable\n"); raise Undefined )
                                                                       end 
 
-        | t_var (Ast.FieldVar (v,v1)) env fenv      = raise Unsupported "Not yet supported"
-        | t_var (Ast.ArrVar (i:Ast.id, e)) env fenv = raise Unsupported "Not yet supported"
+        | t_var (Ast.FieldVar (v,v1)) env fenv      = (print("Not yet supported\n"); raise Unsupported) 
+        | t_var (Ast.ArrVar (i:Ast.id, e)) env fenv = (print("Not yet supported\n"); raise Unsupported) 
 
       and t_seq [] seq_l env fenv      = (seq_l, [])
         | t_seq [a] seq_l env fenv     = (seq_l,[unEx (t_exp a env fenv)])
@@ -216,13 +219,13 @@ struct
                                         (stm::s,e_,fe_)
                                     end 
 
-      and t_dec (Ast.TypeDec tl) env fenv = raise Unsupported "Not yet supported"
+      and t_dec (Ast.TypeDec tl) env fenv = (print("Not yet supported\n"); raise Unsupported) 
         | t_dec (Ast.FuncDec fl) env fenv = let val fenv = (upd_fdec fl env fenv) in (func_dec (fl) env fenv) end
         | t_dec (Ast.VarDec vl) env fenv  = tvar_dec(vl) env fenv 
 
       and func_dec ([Ast.Funcf{funcf_id,fun_args,result_type,funcf_body}]) env fenv = let 
                                                                                       val ot = Env.lookupFunc funcf_id fenv  
-                                                                                      val l = case ot of SOME t => t | NONE => raise Undefined "Function"
+                                                                                      val l = case ot of SOME (t,n) => t | NONE => (print("Function\n"); raise Undefined )
                                                                                       fun arg_he [(id,tid)] env ls n = let val t1 = Temp.newtemp()
                                                                                                                     in
                                                                                                                     case tid of 
@@ -230,7 +233,7 @@ struct
                                                                                                                     if tid = "int" then
                                                                                                                       (Env.update id t1 env,
                                                                                                                       T.MOVE(T.TEMP t1,T.MEM(T.BINOP(T.PLUS,T.TEMP (F.sp),T.CONST n)))::ls,n)  
-                                                                                                                    else raise Unsupported "Type"
+                                                                                                                    else (print("Only int Type supported\n"); raise Unsupported) 
                                                                                                                     | NONE => (Env.update id t1 env,
                                                                                                                       T.MOVE(T.TEMP t1,T.MEM(T.BINOP(T.PLUS,T.TEMP (F.sp),T.CONST n)))::ls,n)
                                                                                                                     end 
@@ -262,20 +265,20 @@ struct
                                         in 
                                             (T.SEQ(stm, s),e_,f_)
                                         end 
-        | func_dec [] env fenv = raise Error "invalid"
+        | func_dec [] env fenv = (print("invalid\n"); raise Error) 
 
       and upd_fdec ([Ast.Funcf{funcf_id,fun_args,result_type,funcf_body}]) env fenv = let val l = Temp.newlabel()
                                                                                       in 
                                                                                       case result_type of 
                                                                                       SOME t => 
                                                                                         if t="int" 
-                                                                                        then (Env.Fupdate funcf_id l fenv)
-                                                                                        else raise Unsupported "Type" 
-                                                                                      | NONE => (Env.Fupdate funcf_id l fenv)
+                                                                                        then (Env.Fupdate funcf_id l fenv (List.length(fun_args)))
+                                                                                        else (print("Only int Type supported\n"); raise Unsupported)  
+                                                                                      | NONE => (Env.Fupdate funcf_id l fenv (List.length(fun_args)))
                                                                                       end
 
         | upd_fdec (fd::fdl) env fenv = let val fenv = upd_fdec [fd] env fenv in upd_fdec fdl env fenv end 
-        | upd_fdec [] env fenv = raise Error "invalid"
+        | upd_fdec [] env fenv = (print("invalid\n"); raise Error) 
 
       and tvar_dec (Ast.Varf{varf_id,varf_ty,varf_first}) env fenv   = let
                                                                       val t = Temp.newtemp() 
@@ -285,7 +288,7 @@ struct
                                                                       (Tree.MOVE (Tree.TEMP t,e),env_ , fenv) 
                                                                    end
     
-      and t_expr (Ast.Expression E) = unNx (t_exp E Env.Envt Env.FEnvt)
+      and t_expr (Ast.Expression E) = unNx (t_exp E Env.Envt (Env.predefined (Env.FEnvt)))
 
     in 
       t_expr (prog)

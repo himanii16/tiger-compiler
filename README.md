@@ -10,9 +10,8 @@ The folder tiger contains the tiger files - tiger.lex, tiger.grm, tc.sml, printa
 
 The folder target contains the target files - mips.sml and pp.sml.
 
-The folder ir contains the intermediate representation files including - canon.sml, environment.sml, printtree.sml,temp.sml, tree.sml, tree.sig.
+The folder ir contains the intermediate representation files including - canon.sml, frame.sml, environment.sml, printtree.sml,temp.sml, tree.sml, tree.sig.
 
-The ir part doesn't yet support all the cases. 
 
 ### COMPILING
 
@@ -56,7 +55,7 @@ To print the output after canonisation implemented on the results of translation
 
 ### TEST CASES
 
-To run all the test cases
+To run all the test cases \[It will pretty print all the programs\]
 ```bash
 make test
 ```

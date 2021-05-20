@@ -1,0 +1,17 @@
+/* cheking */
+let
+    var a := 3 
+    function abc (a:int, b:int) = 
+        if (a < b) then a else b
+    var b := 4
+    function cde (x:int) =   
+        let 
+            var c := 3
+            function xyz (z:int) = 
+                cde(b+c)
+        in 
+            abc (3,4)
+        end 
+in
+    cde(3)
+end
