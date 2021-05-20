@@ -1,9 +1,13 @@
 (* Finite map from strings to 'a *)
 signature ENVIRONMENT = sig 
     type env
+    type fenv
     val Envt : env
+    val FEnvt : fenv
     val lookupVar  : string -> env -> Temp.temp option
+    val lookupFunc  : string -> env -> Temp.label option
     val update : string -> Temp.temp -> env -> env 
+    val Fupdate : string -> Temp.label -> env -> env 
     (* val lookupFunc : *)
 end
 
@@ -22,12 +26,17 @@ struct
 	structure EnvMap = RedBlackMapFn (struct type ord_key = string 
                                       val compare = String.compare end) 
 
-	type env = Temp.temp EnvMap.map 
+	type env  = Temp.temp EnvMap.map 
+    type fenv = Temp.label EnvMap.map
+
 	val Envt : env = EnvMap.empty
+    val FEnvt : fenv = EnvMap.empty
 
 	fun lookupVar str currentEnv = EnvMap.find (currentEnv, str) 
+    fun lookupFunc str currentEnv = EnvMap.find (currentEnv, str) 
 
     fun update str temp_ currentEnv = EnvMap.insert (currentEnv, str,temp_) 
+    fun Fupdate str lab currentEnv = EnvMap.insert (currentEnv, str,lab) 
 
 end
 

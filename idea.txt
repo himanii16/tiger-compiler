@@ -1,0 +1,16 @@
+function name (arg1, arg2, arg3) = 
+    let x = arg1 + arg2 
+        in name (x, arg2, arg 3)
+
+
+
+a lookupFunc Map - functions ke names - labels - temp map 
+
+function call - check name and corresponding label in that map -- 
+                                            let l = helper (fun_args)
+                                            if some l -> then T.CALL (T.LABEL l, l) 
+
+ 
+new function declaration -> func map entry - a new label l - ( args list map : string - temp )
+
+LABEL l 

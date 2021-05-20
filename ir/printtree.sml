@@ -30,10 +30,10 @@ fun printtree (outstream, s0) =
 
         and expr (T.CONST i)             = (ps "CONST "; ps (Int.toString i))
           | expr (T.NAME n)              = (ps "NAME "; ps (Int.toString n))
-          | expr (T.TEMP t)              = (ps "TEMP "; ps (Int.toString t))  
+          | expr (T.TEMP t)              = if t=0 then ps "sp" else if t=1 then ps "fp" else if t=2 then ps "retAddr" else if t=3 then ps "retReg" else (ps "TEMP "; ps (Int.toString t))  
           | expr (T.BINOP (p,e1,e2))     = (ps "BINOP("; binop p; ps ", "; expr(e1); ps ", "; expr(e2); ps ")") 
-          | expr (T.MEM m)              = (pse "MEM("; expr(m); ps ")")
-          | expr (T.CALL (e,el))         = (pse "CALL("; expr(e); app (fn a => (pse ", "; expr(a))) el; ps ")")  
+          | expr (T.MEM m)              = (ps "MEM("; expr(m); ps ")")
+          | expr (T.CALL (e,el))         = (ps "CALL("; expr(e); app (fn a => (ps ", "; expr(a))) el; ps ")")  
           | expr (T.ESEQ (s,e))          = (ps "ESEQ(\n"; inc_indent(); space(!indent); stmt(s); pse ","; space(!indent); expr(e); dec_indent(); ps ")") 
 
         and binop T.PLUS     = ps "PLUS"

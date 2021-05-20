@@ -1,8 +1,11 @@
-let
-    var z := 3
-in
-    while z < 5 do 
-        (z := z + 1;
-        if (z>10) then break)
-    ;z
+let 
+    var n := 10
+    var z := 100
+in 
+    z := for n := 1 to n do (
+        z := z - 25;
+        while (n < z) do (n := n + 1; if n > 10 then break);
+        z := n - 1;
+        if z < 50 then break 
+    )
 end
