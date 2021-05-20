@@ -46,6 +46,14 @@ To print the ir tree of the program after compiling of test1.tig from the test f
 ./tc --ir test/test1.tig
 ```
 
+### Canonisation Output
+
+To print the output after canonisation implemented on the results of translation of test1.tig from the test folder(similar can be done for other .tig files), run one of the following command(giving argument --can)
+```bash
+./tc test/test1.tig --can
+./tc --can test/test1.tig
+```
+
 ### TEST CASES
 
 To run all the test cases

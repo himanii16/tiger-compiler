@@ -1,20 +1,8 @@
 ## To add changes made in project each week
 
-## RE-EVALUTAION LAB3 LAB4
-
-Consider the commit for both lab3 and lab4 with hash: a8ff60c0d17c23db2585eccaede0aee7979fa13e
-
-Commands to run this: make , ./tc filename --ast , ./tc filename --pp
-
-Outputs for the labs in respective folder - lab3 and lab4
-
-The output of lab4 is there in the pdf inside the lab4 folder. On typing command - `make test` , we can get the result for all the test cases on the terminal for pretty printing.
-
-Date of this commit: 22 Apr 
-
 ## UPDATE IN LAB5, LAB6
 
-IR printing - Working for all except function declarations and calls.
+IR - Working, Canonisation - Linearise pipelined with translate output 
 
 ## 2021-02-17
 
@@ -62,4 +50,12 @@ Added skeleton structure for intermediate tree representation \[Incomplete\] and
 
 ## 2021-05-04
 
-Ir translation - Working for few test cases. Function declaration and calls are yet to be added. 
+Ir translation - Working for few test cases. 
+
+## 2021-05-11
+
+Ir translation - Working for all except Function declaration and calls.
+
+## 2021-05-20
+
+Translation + Canonisation completed 
