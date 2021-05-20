@@ -9,7 +9,7 @@ Consider the commit with hash: b1438d762323b721525bf9d85d30109983427da2
 Date of this commit - 26 Apr
 
 This lab was given before the lab6 work, but to check this lab, we require lab6 to be completed. This lab included a file ir/canon.sml.
-It was completed on 26 Apr with the given hash and from then no change has been made (can be verified by comparing both the hashes), but to check this, one need to use the hash provided for lab 6. 
+It was completed on 26 Apr with the given hash and from then no change has been made (can be verified by comparing both the hashes). To check this lab, you will need to use the hash provided for lab 6. 
 
 ### LAB 6
 
