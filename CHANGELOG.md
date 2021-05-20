@@ -1,8 +1,13 @@
 ## To add changes made in project each week
 
-## UPDATE IN LAB5, LAB6
+## LAB5, LAB6 EVALUATION
 
-IR - Working, Canonisation - Linearise pipelined with translate output 
+Consider the commit for both lab5 and lab6 with hash: df2d79bc2f1eec452d0a875f4354e9f81d3158fb
+
+Command to run lab5: make , ./tc filename --can 
+Command to run lab6: make , ./tc filename --ir
+
+Date of this commit: 20 May
 
 ## 2021-02-17
 
